@@ -7,51 +7,134 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { supabase } from "@/supabaseClient";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
+import { toast } from "sonner";
+import { useRouter } from "@tanstack/react-router";
 
 export function LoginForm() {
+  const router = useRouter();
+
+  const formSchema = z.object({
+    email: z.string().email("Invalid email"),
+    password: z
+      .string()
+      .min(6, { message: "Password must be at least 6 characters" }),
+  });
+  const [loading, setLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+  const handleLogin = async () => {
+    setLoading(true);
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.getValues().email,
+      password: form.getValues().password,
+    });
+
+    if (error) {
+      toast.error(error.message);
+      form.setError("password", { message: error.message });
+      form.setError("email", { message: error.message });
+    }
+    if (data) {
+      router.navigate({ to: "/dashboard", replace: true });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.navigate({ to: "/dashboard", replace: true });
+      }
+    });
+  }, []);
+
   return (
-    <Card className="mx-auto max-w-sm">
-      <CardHeader>
-        <CardTitle className="text-2xl">Login</CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="m@example.com"
-              required
-            />
-          </div>
-          <div className="grid gap-2">
-            <div className="flex items-center">
-              <Label htmlFor="password">Password</Label>
-              <a href="#" className="ml-auto inline-block text-sm underline">
-                Forgot your password?
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleLogin)}
+        className="space-y-8 mt-28"
+      >
+        <Card className="mx-auto max-w-sm">
+          <CardHeader>
+            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardDescription>
+              Enter your email below to login to your account
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="email"
+                          type="email"
+                          placeholder="m@example.com"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="password"
+                          type="password"
+                          placeholder="********"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button type="submit" isLoading={loading} className="w-full">
+                Login
+              </Button>
+            </div>
+            <div className="mt-4 text-center text-sm">
+              Don&apos;t have an account?{" "}
+              <a href="#" className="underline">
+                Sign up
               </a>
             </div>
-            <Input id="password" type="password" required />
-          </div>
-          <Button type="submit" className="w-full">
-            Login
-          </Button>
-          <Button variant="outline" className="w-full">
-            Login with Google
-          </Button>
-        </div>
-        <div className="mt-4 text-center text-sm">
-          Don&apos;t have an account?{" "}
-          <a href="#" className="underline">
-            Sign up
-          </a>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      </form>
+    </Form>
   );
 }
