@@ -1,4 +1,3 @@
-import * as React from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +13,6 @@ import {
 import {
   ArrowUpDown,
   ChevronDown,
-  Loader,
   MoreHorizontal,
   RefreshCwIcon,
 } from "lucide-react";
