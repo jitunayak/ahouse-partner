@@ -8,12 +8,15 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const router = useRouter();
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      router.navigate({ to: "/dashboard", replace: true });
-    } else {
-      router.navigate({ to: "/login", replace: true });
-    }
-  });
-  return "Hello /!";
+  React.useEffect(() => {
+    console.log("supabase.auth.onAuthStateChange");
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.navigate({ to: "/dashboard", replace: true });
+      } else {
+        router.navigate({ to: "/login", replace: true });
+      }
+    });
+  }, [supabase.auth.onAuthStateChange]);
+  return "";
 }

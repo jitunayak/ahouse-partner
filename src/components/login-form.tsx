@@ -22,9 +22,11 @@ import {
 } from "./ui/form";
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
 
 export function LoginForm() {
   const router = useRouter();
+  const auth = useAuth();
 
   const formSchema = z.object({
     email: z.string().email("Invalid email"),
@@ -43,28 +45,30 @@ export function LoginForm() {
   });
   const handleLogin = async () => {
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: form.getValues().email,
-      password: form.getValues().password,
-    });
-
-    if (error) {
-      toast.error(error.message);
-      form.setError("password", { message: error.message });
-      form.setError("email", { message: error.message });
-    }
-    if (data) {
-      router.navigate({ to: "/dashboard", replace: true });
-    }
-    setLoading(false);
+    supabase.auth
+      .signInWithPassword({
+        email: form.getValues().email,
+        password: form.getValues().password,
+      })
+      .then(({ error, data }) => {
+        if (error) {
+          toast.error(error.message);
+          return;
+        }
+        if (data) {
+          router.navigate({ to: "/dashboard", replace: true });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.navigate({ to: "/dashboard", replace: true });
-      }
-    });
+    if (auth.user) {
+      router.navigate({ to: "/dashboard", replace: true });
+    }
+    return () => {};
   }, []);
 
   return (

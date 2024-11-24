@@ -2,6 +2,7 @@ import * as React from "react";
 import { Outlet, createRootRoute } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { Toaster } from "@/components/ui/sonner";
+import { AuthProvider } from "@/hooks/useAuth";
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -10,9 +11,11 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <React.Fragment>
-      <Outlet />
-      <Toaster richColors theme="light" expand />
-      <TanStackRouterDevtools />
+      <AuthProvider>
+        <Outlet />
+        <Toaster richColors theme="light" expand />
+        <TanStackRouterDevtools position="bottom-right" />
+      </AuthProvider>
     </React.Fragment>
   );
 }

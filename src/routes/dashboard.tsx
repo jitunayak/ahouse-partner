@@ -1,9 +1,15 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { DashBoard } from "@/components/dashboard";
+import { useAuth } from "@/hooks/useAuth";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/dashboard')({
+export const Route = createFileRoute("/dashboard")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return 'Hello /main!'
+  const auth = useAuth();
+  if (auth.isLoading) {
+    return <Outlet />;
+  }
+  return <DashBoard />;
 }
