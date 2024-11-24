@@ -65,10 +65,9 @@ export function LoginForm() {
   };
 
   useEffect(() => {
-    if (auth.user) {
+    if (auth.user && auth.session) {
       router.navigate({ to: "/home", replace: true });
     }
-    return () => {};
   }, []);
 
   return (

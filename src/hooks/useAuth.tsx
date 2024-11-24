@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       console.log({ session, error });
       if (error || !session) {
-        setState({ session, user: null, isLoading: false });
+        setState({ session: null, user: null, isLoading: false });
         router.navigate({ to: "/login", replace: true });
         return;
       }
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         });
     });
-  }, []);
+  }, [supabase.auth.onAuthStateChange]);
 
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;
 }

@@ -10,7 +10,13 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        staleTime: Infinity,
+      },
+    },
+  });
 
   return (
     <React.Fragment>

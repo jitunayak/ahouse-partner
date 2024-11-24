@@ -55,8 +55,9 @@ export function AppSidebar() {
   });
 
   const handleSignOut = () => {
-    supabase.auth.signOut();
-    router.navigate({ to: "/login", replace: true });
+    supabase.auth.signOut().then(() => {
+      router.navigate({ to: "/login", replace: true });
+    });
   };
 
   return (
