@@ -36,6 +36,7 @@ import {
 import { CreateUserModal } from "./create-user-modal";
 import { supabase } from "@/supabaseClient";
 import { Badge } from "./ui/badge";
+import { useAuth } from "@/hooks/useAuth";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -208,6 +209,7 @@ export function UserManagement() {
   const [rowSelection, setRowSelection] = React.useState({});
   const [data, setData] = React.useState<any>([]);
 
+  const { user } = useAuth();
   React.useEffect(() => {
     const fetchData = async () => {
       const { data, error } = await supabase
@@ -215,6 +217,7 @@ export function UserManagement() {
         .select(
           `id, email_address, first_name, last_name, role, created_at, created_by:profiles(email_address)`
         )
+        .eq("org_id", user.org_id)
         .order("id", { ascending: false });
 
       if (error) {
