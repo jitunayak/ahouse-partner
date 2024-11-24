@@ -76,7 +76,7 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("email_address")}</div>
+      <div className="lowercase text-xs">{row.getValue("id")}</div>
     ),
   },
   {
@@ -93,7 +93,7 @@ export const columns: ColumnDef<any>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="lowercase">{row.getValue("email_address")}</div>
+      <div className="lowercase text-sm">{row.getValue("email_address")}</div>
     ),
   },
   {
