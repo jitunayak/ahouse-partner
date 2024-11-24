@@ -1,3 +1,4 @@
+import { Inbox } from "@/components/inbox";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/home/_home/inbox")({
@@ -5,5 +6,5 @@ export const Route = createFileRoute("/home/_home/inbox")({
 });
 
 function RouteComponent() {
-  return "Hello /home/_inbox!";
+  return <Inbox />;
 }

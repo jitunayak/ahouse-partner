@@ -14,7 +14,6 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as InboxImport } from './routes/inbox'
 import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeImport } from './routes/home/_home'
 import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
@@ -36,12 +35,6 @@ const HomeRoute = HomeImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const InboxRoute = InboxImport.update({
-  id: '/inbox',
-  path: '/inbox',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -83,13 +76,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/inbox': {
-      id: '/inbox'
-      path: '/inbox'
-      fullPath: '/inbox'
-      preLoaderRoute: typeof InboxImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -167,7 +153,6 @@ const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
   '/home': typeof HomeHomeRouteWithChildren
   '/home/inbox': typeof HomeHomeInboxRoute
@@ -177,7 +162,6 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
   '/home': typeof HomeHomeIndexRoute
   '/home/inbox': typeof HomeHomeInboxRoute
@@ -187,7 +171,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
@@ -200,18 +183,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/inbox'
     | '/login'
     | '/home'
     | '/home/inbox'
     | '/home/management'
     | '/home/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inbox' | '/login' | '/home' | '/home/inbox' | '/home/management'
+  to: '/' | '/login' | '/home' | '/home/inbox' | '/home/management'
   id:
     | '__root__'
     | '/'
-    | '/inbox'
     | '/login'
     | '/home'
     | '/home/_home'
@@ -223,14 +204,12 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  InboxRoute: typeof InboxRoute
   LoginRoute: typeof LoginRoute
   HomeRoute: typeof HomeRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  InboxRoute: InboxRoute,
   LoginRoute: LoginRoute,
   HomeRoute: HomeRouteWithChildren,
 }
@@ -246,16 +225,12 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/inbox",
         "/login",
         "/home"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/inbox": {
-      "filePath": "inbox.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
