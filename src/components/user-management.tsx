@@ -261,7 +261,7 @@ export function UserManagement() {
     return <div>{error.message}</div>;
   }
   return (
-    <div className="w-full m-8">
+    <div className="m-8 w-full">
       <CreateUserModal />
       <div className="flex items-center py-4 gap-6">
         <Input

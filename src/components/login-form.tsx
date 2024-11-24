@@ -56,7 +56,7 @@ export function LoginForm() {
           return;
         }
         if (data) {
-          router.navigate({ to: "/dashboard", replace: true });
+          router.navigate({ to: "/home", replace: true });
         }
       })
       .finally(() => {
@@ -66,7 +66,7 @@ export function LoginForm() {
 
   useEffect(() => {
     if (auth.user) {
-      router.navigate({ to: "/dashboard", replace: true });
+      router.navigate({ to: "/home", replace: true });
     }
     return () => {};
   }, []);

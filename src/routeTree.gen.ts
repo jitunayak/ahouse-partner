@@ -8,15 +8,29 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
+import { createFileRoute } from '@tanstack/react-router'
+
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as InboxImport } from './routes/inbox'
-import { Route as DashboardImport } from './routes/dashboard'
 import { Route as IndexImport } from './routes/index'
+import { Route as HomeHomeImport } from './routes/home/_home'
+import { Route as HomeHomeManagementImport } from './routes/home/_home.management'
+import { Route as HomeHomeInboxImport } from './routes/home/_home.inbox'
+
+// Create Virtual Routes
+
+const HomeImport = createFileRoute('/home')()
 
 // Create/Update Routes
+
+const HomeRoute = HomeImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -30,16 +44,27 @@ const InboxRoute = InboxImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const DashboardRoute = DashboardImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const HomeHomeRoute = HomeHomeImport.update({
+  id: '/_home',
+  getParentRoute: () => HomeRoute,
+} as any)
+
+const HomeHomeManagementRoute = HomeHomeManagementImport.update({
+  id: '/management',
+  path: '/management',
+  getParentRoute: () => HomeHomeRoute,
+} as any)
+
+const HomeHomeInboxRoute = HomeHomeInboxImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => HomeHomeRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -51,13 +76,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardImport
       parentRoute: typeof rootRoute
     }
     '/inbox': {
@@ -74,54 +92,127 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeImport
+      parentRoute: typeof rootRoute
+    }
+    '/home/_home': {
+      id: '/home/_home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeHomeImport
+      parentRoute: typeof HomeRoute
+    }
+    '/home/_home/inbox': {
+      id: '/home/_home/inbox'
+      path: '/inbox'
+      fullPath: '/home/inbox'
+      preLoaderRoute: typeof HomeHomeInboxImport
+      parentRoute: typeof HomeHomeImport
+    }
+    '/home/_home/management': {
+      id: '/home/_home/management'
+      path: '/management'
+      fullPath: '/home/management'
+      preLoaderRoute: typeof HomeHomeManagementImport
+      parentRoute: typeof HomeHomeImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface HomeHomeRouteChildren {
+  HomeHomeInboxRoute: typeof HomeHomeInboxRoute
+  HomeHomeManagementRoute: typeof HomeHomeManagementRoute
+}
+
+const HomeHomeRouteChildren: HomeHomeRouteChildren = {
+  HomeHomeInboxRoute: HomeHomeInboxRoute,
+  HomeHomeManagementRoute: HomeHomeManagementRoute,
+}
+
+const HomeHomeRouteWithChildren = HomeHomeRoute._addFileChildren(
+  HomeHomeRouteChildren,
+)
+
+interface HomeRouteChildren {
+  HomeHomeRoute: typeof HomeHomeRouteWithChildren
+}
+
+const HomeRouteChildren: HomeRouteChildren = {
+  HomeHomeRoute: HomeHomeRouteWithChildren,
+}
+
+const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/home': typeof HomeHomeRouteWithChildren
+  '/home/inbox': typeof HomeHomeInboxRoute
+  '/home/management': typeof HomeHomeManagementRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/home': typeof HomeHomeRouteWithChildren
+  '/home/inbox': typeof HomeHomeInboxRoute
+  '/home/management': typeof HomeHomeManagementRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/dashboard': typeof DashboardRoute
   '/inbox': typeof InboxRoute
   '/login': typeof LoginRoute
+  '/home': typeof HomeRouteWithChildren
+  '/home/_home': typeof HomeHomeRouteWithChildren
+  '/home/_home/inbox': typeof HomeHomeInboxRoute
+  '/home/_home/management': typeof HomeHomeManagementRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/inbox' | '/login'
+  fullPaths:
+    | '/'
+    | '/inbox'
+    | '/login'
+    | '/home'
+    | '/home/inbox'
+    | '/home/management'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/inbox' | '/login'
-  id: '__root__' | '/' | '/dashboard' | '/inbox' | '/login'
+  to: '/' | '/inbox' | '/login' | '/home' | '/home/inbox' | '/home/management'
+  id:
+    | '__root__'
+    | '/'
+    | '/inbox'
+    | '/login'
+    | '/home'
+    | '/home/_home'
+    | '/home/_home/inbox'
+    | '/home/_home/management'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DashboardRoute: typeof DashboardRoute
   InboxRoute: typeof InboxRoute
   LoginRoute: typeof LoginRoute
+  HomeRoute: typeof HomeRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DashboardRoute: DashboardRoute,
   InboxRoute: InboxRoute,
   LoginRoute: LoginRoute,
+  HomeRoute: HomeRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -135,22 +226,41 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/dashboard",
         "/inbox",
-        "/login"
+        "/login",
+        "/home"
       ]
     },
     "/": {
       "filePath": "index.tsx"
-    },
-    "/dashboard": {
-      "filePath": "dashboard.tsx"
     },
     "/inbox": {
       "filePath": "inbox.tsx"
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/home": {
+      "filePath": "home",
+      "children": [
+        "/home/_home"
+      ]
+    },
+    "/home/_home": {
+      "filePath": "home/_home.tsx",
+      "parent": "/home",
+      "children": [
+        "/home/_home/inbox",
+        "/home/_home/management"
+      ]
+    },
+    "/home/_home/inbox": {
+      "filePath": "home/_home.inbox.tsx",
+      "parent": "/home/_home"
+    },
+    "/home/_home/management": {
+      "filePath": "home/_home.management.tsx",
+      "parent": "/home/_home"
     }
   }
 }

@@ -15,7 +15,7 @@ import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { Calendar, Home, Inbox, Search, Settings, Mail } from "lucide-react";
 import { Button } from "./button";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -23,12 +23,12 @@ export function AppSidebar() {
   const items = [
     {
       title: "Home",
-      url: "#",
+      url: "/home/management",
       icon: Home,
     },
     {
       title: "Inbox",
-      url: "#",
+      url: "/home/inbox",
       icon: Inbox,
     },
     {
@@ -80,10 +80,10 @@ export function AppSidebar() {
             {items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                  <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}

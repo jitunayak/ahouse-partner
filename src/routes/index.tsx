@@ -12,7 +12,7 @@ function RouteComponent() {
     console.log("supabase.auth.onAuthStateChange");
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        router.navigate({ to: "/dashboard", replace: true });
+        router.navigate({ to: "/home", replace: true });
       } else {
         router.navigate({ to: "/login", replace: true });
       }

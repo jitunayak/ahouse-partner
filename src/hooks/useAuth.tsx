@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     setState((prev) => ({ ...prev, isLoading: true }));
     supabase.auth.getSession().then(({ data: { session }, error }) => {
-      // console.log({ session, error });
+      console.log({ session, error });
       if (error || !session) {
         setState({ session, user: null, isLoading: false });
         router.navigate({ to: "/login", replace: true });
@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .then(({ data }) => {
           if (data) {
             setState({ session, user: data, isLoading: false });
-            router.navigate({ to: "/dashboard", replace: true });
+            // router.navigate({ to: "/home", replace: true });
           }
         });
     });
