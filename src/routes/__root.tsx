@@ -13,7 +13,7 @@ function RootComponent() {
     <React.Fragment>
       <AuthProvider>
         <Outlet />
-        <Toaster richColors theme="light" expand />
+        <Toaster richColors theme="light" expand closeButton />
         <TanStackRouterDevtools position="bottom-right" />
       </AuthProvider>
     </React.Fragment>

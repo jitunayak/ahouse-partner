@@ -30,8 +30,13 @@ import {
   FormMessage,
   Form,
 } from "./ui/form";
+import { supabase } from "@/supabaseClient";
+import { useState } from "react";
+import { toast } from "sonner";
 
 export function CreateUserModal() {
+  const [loading, setLoading] = useState(false);
+
   const formSchema = z.object({
     firstName: z.string().min(1),
     lastName: z.string().min(1),
@@ -52,8 +57,42 @@ export function CreateUserModal() {
 
   async function handleUseCreation(values: FormSchema) {
     console.log(values);
-    console.log(form.getValues());
-    form.reset();
+    setLoading(true);
+    try {
+      const response = await fetch("/api/v1/create-account", {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${
+            (await supabase.auth.getSession()).data.session?.access_token
+          }`,
+        },
+        method: "POST",
+        body: JSON.stringify({
+          email: values.email,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          role: values.role,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      console.log({ response });
+      const data = await response.json();
+      toast.success("User created successfully", {
+        description: "User need to reset password upon login",
+      });
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to create user", {
+        description: (error as Error).message,
+      });
+    } finally {
+      setLoading(false);
+      form.reset();
+    }
   }
 
   return (
@@ -157,7 +196,9 @@ export function CreateUserModal() {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit">Submit</Button>
+              <Button type="submit" isLoading={loading}>
+                Submit
+              </Button>
             </DialogFooter>
           </form>
         </Form>

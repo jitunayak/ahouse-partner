@@ -63,6 +63,23 @@ export const columns: ColumnDef<any>[] = [
   },
 
   {
+    accessorKey: "id",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          id
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("email_address")}</div>
+    ),
+  },
+  {
     accessorKey: "email_address",
     header: ({ column }) => {
       return (
@@ -92,7 +109,9 @@ export const columns: ColumnDef<any>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="">{row.getValue("first_name")}</div>,
+    cell: ({ row }) => (
+      <div className="text-center">{row.getValue("first_name")}</div>
+    ),
   },
   {
     accessorKey: "last_name",
@@ -149,24 +168,23 @@ export const columns: ColumnDef<any>[] = [
     ),
   },
 
-  {
-    accessorKey: "created_by",
-    accessorFn: (row) => row.created_by[0].email_address,
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Created By
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <Badge variant="outline">{row.getValue("created_by")}</Badge>
-    ),
-  },
+  // {
+  //   accessorKey: "created_by",
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Created By
+  //         <ArrowUpDown />
+  //       </Button>
+  //     );
+  //   },
+  //   cell: ({ row }) => (
+  //     <Badge variant="outline">{row.getValue("created_by")}</Badge>
+  //   ),
+  // },
 
   {
     id: "actions",
@@ -215,7 +233,7 @@ export function UserManagement() {
       const { data, error } = await supabase
         .from("profiles")
         .select(
-          `id, email_address, first_name, last_name, role, created_at, created_by:profiles(email_address)`
+          `id, email_address, first_name, last_name, role, created_at, created_by`
         )
         .eq("org_id", user.org_id)
         .order("id", { ascending: false });

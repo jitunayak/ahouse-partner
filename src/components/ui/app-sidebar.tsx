@@ -13,7 +13,7 @@ import {
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, Inbox, Search, Settings, Mail } from "lucide-react";
 import { Button } from "./button";
 import { useRouter } from "@tanstack/react-router";
 
@@ -61,9 +61,16 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader>
-        <div>Logo</div>
-        <span className="text-sm">{user?.email}</span>
+      <SidebarHeader className="flex items-center">
+        <img
+          src="https://1000logos.net/wp-content/uploads/2021/06/HDFC-Bank-logo.png"
+          alt="logo"
+          className="h-14 object-contain scale-150"
+        />
+        <div className="flex items-center gap-2">
+          <Mail className="w-4 h-4" />
+          <span className="text-xs">{user?.email}</span>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup />
