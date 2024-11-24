@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -36,48 +34,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { CreateUserModal } from "./create-user-modal";
+import { supabase } from "@/supabaseClient";
+import { Badge } from "./ui/badge";
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
-
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<any>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -100,15 +60,9 @@ export const columns: ColumnDef<Payment>[] = [
     enableSorting: false,
     enableHiding: false,
   },
+
   {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
+    accessorKey: "email_address",
     header: ({ column }) => {
       return (
         <Button
@@ -120,23 +74,99 @@ export const columns: ColumnDef<Payment>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    cell: ({ row }) => (
+      <div className="lowercase">{row.getValue("email_address")}</div>
+    ),
   },
   {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
+    accessorKey: "first_name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          First Name
+          <ArrowUpDown />
+        </Button>
+      );
     },
+    cell: ({ row }) => <div className="">{row.getValue("first_name")}</div>,
   },
+  {
+    accessorKey: "last_name",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Last Name
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div className="">{row.getValue("last_name")}</div>,
+  },
+  {
+    accessorKey: "role",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Role
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <Badge variant={"secondary"} className="">
+        {row.getValue("role")}
+      </Badge>
+    ),
+  },
+
+  {
+    accessorKey: "created_at",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created At
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <div className="lowercase">
+        {new Date(row.getValue("created_at")).toLocaleString()}
+      </div>
+    ),
+  },
+
+  {
+    accessorKey: "created_by",
+    accessorFn: (row) => row.created_by[0].email_address,
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <Badge variant="outline">{row.getValue("created_by")}</Badge>
+    ),
+  },
+
   {
     id: "actions",
     enableHiding: false,
@@ -176,6 +206,25 @@ export function UserManagement() {
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [data, setData] = React.useState<any>([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select(
+          `id, email_address, first_name, last_name, role, created_at, created_by:profiles(email_address)`
+        )
+        .order("id", { ascending: false });
+
+      if (error) {
+        console.log("error", error);
+      } else {
+        setData(data);
+      }
+    };
+    fetchData();
+  }, []);
 
   const table = useReactTable({
     data,
@@ -202,9 +251,11 @@ export function UserManagement() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("email_address")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
+            table.getColumn("email_address")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
