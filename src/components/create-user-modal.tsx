@@ -56,7 +56,6 @@ export function CreateUserModal() {
   });
 
   async function handleUseCreation(values: FormSchema) {
-    console.log(values);
     setLoading(true);
     try {
       const response = await fetch("/api/v1/create-account", {
