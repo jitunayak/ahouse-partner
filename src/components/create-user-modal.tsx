@@ -33,9 +33,11 @@ import {
 import { supabase } from "@/supabaseClient";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 export function CreateUserModal() {
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const formSchema = z.object({
     firstName: z.string().min(1),
@@ -91,6 +93,7 @@ export function CreateUserModal() {
     } finally {
       setLoading(false);
       form.reset();
+      queryClient.invalidateQueries({ queryKey: ["profiles"] });
     }
   }
 

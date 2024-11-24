@@ -11,7 +11,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Loader,
+  MoreHorizontal,
+  RefreshCwIcon,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,6 +43,8 @@ import { CreateUserModal } from "./create-user-modal";
 import { supabase } from "@/supabaseClient";
 import { Badge } from "./ui/badge";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -218,37 +226,33 @@ export const columns: ColumnDef<any>[] = [
 ];
 
 export function UserManagement() {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [data, setData] = React.useState<any>([]);
+  const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [rowSelection, setRowSelection] = useState({});
 
   const { user } = useAuth();
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select(
-          `id, email_address, first_name, last_name, role, created_at, created_by`
-        )
-        .eq("org_id", user.org_id)
-        .order("id", { ascending: false });
+  const fetchAllProfiles = async () =>
+    await supabase
+      .from("profiles")
+      .select(
+        `id, email_address, first_name, last_name, role, created_at, created_by`
+      )
+      .eq("org_id", user.org_id)
+      .order("id", { ascending: false });
 
-      if (error) {
-        console.log("error", error);
-      } else {
-        setData(data);
-      }
-    };
-    fetchData();
-  }, []);
+  const {
+    isPending,
+    data: allProfiles,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["profiles"],
+    queryFn: fetchAllProfiles,
+  });
 
   const table = useReactTable({
-    data,
+    data: allProfiles?.data ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -266,10 +270,14 @@ export function UserManagement() {
     },
   });
 
+  if (error) {
+    return <div>{error.message}</div>;
+  }
   return (
     <div className="w-full m-8">
+      {isPending && <div>Loading...</div>}
       <CreateUserModal />
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-6">
         <Input
           placeholder="Filter emails..."
           value={
@@ -306,6 +314,11 @@ export function UserManagement() {
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <RefreshCwIcon
+          onClick={() => refetch()}
+          className="w-4 h-4 cursor-pointer "
+        />
       </div>
       <div className="rounded-md border w-full">
         <Table>
