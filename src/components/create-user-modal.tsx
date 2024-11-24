@@ -34,6 +34,7 @@ import { supabase } from "@/supabaseClient";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { UserIcon } from "lucide-react";
 
 export function CreateUserModal() {
   const [loading, setLoading] = useState(false);
@@ -100,20 +101,23 @@ export function CreateUserModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">Add user</Button>
+        <Button variant="default" size={"sm"}>
+          <UserIcon className="w-4 h-4 mr-2" />
+          Add user
+        </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleUseCreation)}>
-            <DialogHeader>
+            <DialogHeader className="pb-8">
               <DialogTitle>Create new account</DialogTitle>
               <DialogDescription>
                 Fill in your email below to create your new account.
               </DialogDescription>
             </DialogHeader>
 
-            <div className="grid gap-4 py-4">
+            <div className="grid gap-8 py-4">
               <div className="grid grid-cols-1 items-center gap-4">
                 <div className="grid grid-cols-2 items-center gap-4">
                   <FormField

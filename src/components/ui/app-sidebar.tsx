@@ -61,16 +61,16 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="flex items-center">
+      <SidebarHeader className="flex items-start">
         <img
           src="https://1000logos.net/wp-content/uploads/2021/06/HDFC-Bank-logo.png"
           alt="logo"
-          className="h-14 object-contain scale-150"
+          className="h-14 object-contain scale-120"
         />
-        <div className="flex items-center gap-2">
-          <Mail className="w-4 h-4" />
+        <Button variant={"secondary"} className="flex items-center gap-2">
+          <Mail className="w-2 h-2" />
           <span className="text-xs">{user?.email}</span>
-        </div>
+        </Button>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup />

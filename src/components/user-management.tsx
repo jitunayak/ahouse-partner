@@ -45,6 +45,7 @@ import { Badge } from "./ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -105,37 +106,23 @@ export const columns: ColumnDef<any>[] = [
     ),
   },
   {
-    accessorKey: "first_name",
+    accessorKey: "full_name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          First Name
+          Full Name
           <ArrowUpDown />
         </Button>
       );
     },
     cell: ({ row }) => (
-      <div className="text-center">{row.getValue("first_name")}</div>
+      <div className="text-center">{row.getValue("full_name")}</div>
     ),
   },
-  {
-    accessorKey: "last_name",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Last Name
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="">{row.getValue("last_name")}</div>,
-  },
+
   {
     accessorKey: "role",
     header: ({ column }) => {
@@ -153,6 +140,24 @@ export const columns: ColumnDef<any>[] = [
       <Badge variant={"secondary"} className="">
         {row.getValue("role")}
       </Badge>
+    ),
+  },
+
+  {
+    accessorKey: "created_by",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Created By
+          <ArrowUpDown />
+        </Button>
+      );
+    },
+    cell: ({ row }) => (
+      <Badge variant="outline">{row.getValue("created_by")}</Badge>
     ),
   },
 
@@ -175,24 +180,6 @@ export const columns: ColumnDef<any>[] = [
       </div>
     ),
   },
-
-  // {
-  //   accessorKey: "created_by",
-  //   header: ({ column }) => {
-  //     return (
-  //       <Button
-  //         variant="ghost"
-  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-  //       >
-  //         Created By
-  //         <ArrowUpDown />
-  //       </Button>
-  //     );
-  //   },
-  //   cell: ({ row }) => (
-  //     <Badge variant="outline">{row.getValue("created_by")}</Badge>
-  //   ),
-  // },
 
   {
     id: "actions",
@@ -232,11 +219,12 @@ export function UserManagement() {
   const [rowSelection, setRowSelection] = useState({});
 
   const { user } = useAuth();
+
   const fetchAllProfiles = async () =>
     await supabase
-      .from("profiles")
+      .from("profiles_with_org_and_creator")
       .select(
-        `id, email_address, first_name, last_name, role, created_at, created_by`
+        `id, email_address, full_name, org_name, role, created_at, created_by`
       )
       .eq("org_id", user.org_id)
       .order("id", { ascending: false });
@@ -246,6 +234,7 @@ export function UserManagement() {
     data: allProfiles,
     error,
     refetch,
+    isRefetching,
   } = useQuery({
     queryKey: ["profiles"],
     queryFn: fetchAllProfiles,
@@ -275,7 +264,6 @@ export function UserManagement() {
   }
   return (
     <div className="w-full m-8">
-      {isPending && <div>Loading...</div>}
       <CreateUserModal />
       <div className="flex items-center py-4 gap-6">
         <Input
@@ -317,7 +305,9 @@ export function UserManagement() {
 
         <RefreshCwIcon
           onClick={() => refetch()}
-          className="w-4 h-4 cursor-pointer "
+          className={cn(
+            `w-4 h-4 ${isPending || isRefetching ? "animate-spin" : "animate-pulse"}`
+          )}
         />
       </div>
       <div className="rounded-md border w-full">
