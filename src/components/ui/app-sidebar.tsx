@@ -66,7 +66,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="flex items-start">
         <img
-          src="https://1000logos.net/wp-content/uploads/2021/06/HDFC-Bank-logo.png"
+          src={auth.user?.logo_url}
           alt="logo"
           className="h-14 object-contain scale-120"
         />

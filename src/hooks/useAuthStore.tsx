@@ -16,13 +16,30 @@ const getUserSession = async () => {
     .eq("id", session?.user?.id)
     .single();
 
-  return { data, error, session };
+  const { data: org } = await supabase
+    .from("organizations")
+    .select("logo_url, name, accent_color")
+    .eq("id", data?.org_id)
+    .single();
+
+  const info: IUser = {
+    email_address: data?.email_address ?? "",
+    role: data?.role ?? "",
+    org_id: data?.org_id ?? "",
+    logo_url: org?.logo_url ?? "",
+    accent_color: org?.accent_color ?? "black",
+  };
+  // document.documentElement.style.setProperty("--primary", "");
+
+  return { data: info, error, session };
 };
 
 interface IUser {
   email_address: string;
   role: string;
   org_id: string;
+  logo_url: string;
+  accent_color: string;
 }
 interface AuthState {
   user: IUser | null;
