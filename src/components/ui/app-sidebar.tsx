@@ -54,10 +54,10 @@ export function AppSidebar() {
     });
   });
 
-  const handleSignOut = () => {
-    supabase.auth.signOut().then(() => {
-      router.navigate({ to: "/login", replace: true });
-    });
+  const handleSignOut = async () => {
+    console.log("signing out");
+    router.navigate({ to: "/login", replace: true });
+    supabase.auth.signOut();
   };
 
   return (
@@ -98,7 +98,7 @@ export function AppSidebar() {
           onClick={() => handleSignOut()}
           className="bg-red-50 text-red-600"
         >
-          Logout
+          Log out
         </Button>
       </SidebarFooter>
     </Sidebar>

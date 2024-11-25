@@ -216,7 +216,7 @@ export function UserManagement() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { user } = useAuth();
+  const { user, isLoading } = useAuth();
 
   const fetchAllProfiles = async () =>
     await supabase
@@ -236,6 +236,7 @@ export function UserManagement() {
   } = useQuery({
     queryKey: ["profiles"],
     queryFn: fetchAllProfiles,
+    enabled: !isLoading && !!user?.org_id,
   });
 
   const table = useReactTable({
