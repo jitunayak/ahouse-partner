@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Calendar, Home, Inbox, Search, Settings, Mail } from "lucide-react";
 import { Button } from "./button";
 import { Link, useRouter } from "@tanstack/react-router";
+import { useAuthStore } from "@/hooks";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -54,10 +55,11 @@ export function AppSidebar() {
     });
   });
 
+  const auth = useAuthStore();
+
   const handleSignOut = async () => {
-    console.log("signing out");
+    await auth.signout();
     router.navigate({ to: "/login", replace: true });
-    supabase.auth.signOut();
   };
 
   return (

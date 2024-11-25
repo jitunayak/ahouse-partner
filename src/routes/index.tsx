@@ -9,7 +9,6 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const router = useRouter();
   React.useEffect(() => {
-    console.log("supabase.auth.onAuthStateChange");
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         router.navigate({ to: "/home", replace: true });

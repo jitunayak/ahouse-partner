@@ -40,10 +40,10 @@ import {
 import { CreateUserModal } from "./create-user-modal";
 import { supabase } from "@/supabaseClient";
 import { Badge } from "./ui/badge";
-import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuthStore } from "@/hooks";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -216,16 +216,17 @@ export function UserManagement() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { user, isLoading } = useAuth();
+  const { user } = useAuthStore();
 
-  const fetchAllProfiles = async () =>
-    await supabase
+  const fetchAllProfiles = async () => {
+    return await supabase
       .from("profiles_with_org_and_creator")
       .select(
         `id, email_address, full_name, org_name, role, created_at, created_by`
       )
-      .eq("org_id", user.org_id)
+      .eq("org_id", user?.org_id)
       .order("id", { ascending: false });
+  };
 
   const {
     isPending,
@@ -234,9 +235,9 @@ export function UserManagement() {
     refetch,
     isRefetching,
   } = useQuery({
-    queryKey: ["profiles"],
+    queryKey: ["profiles", user?.org_id],
     queryFn: fetchAllProfiles,
-    enabled: !isLoading && !!user?.org_id,
+    enabled: !!user?.org_id,
   });
 
   const table = useReactTable({

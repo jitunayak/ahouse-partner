@@ -22,11 +22,11 @@ import {
 } from "./ui/form";
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuthStore } from "@/hooks";
 
 export function LoginForm() {
   const router = useRouter();
-  const auth = useAuth();
+  const auth = useAuthStore();
 
   const formSchema = z.object({
     email: z.string().email("Invalid email"),
@@ -56,7 +56,9 @@ export function LoginForm() {
           return;
         }
         if (data) {
-          router.navigate({ to: "/home", replace: true });
+          auth.login().then(() => {
+            router.navigate({ to: "/home", replace: true });
+          });
         }
       })
       .finally(() => {
