@@ -77,19 +77,20 @@ export function CreateUserModal() {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      console.log({ response });
       const data = await response.json();
+      if (!response.ok) {
+        toast.error("Failed to create user", {
+          description: data.error,
+        });
+        return;
+      }
       toast.success("User created successfully", {
         description: "User need to reset password upon login",
       });
-      console.log(data);
     } catch (error) {
-      console.log(error);
+      console.log({ error });
       toast.error("Failed to create user", {
-        description: (error as Error).message,
+        description: (error as Error).message + JSON.stringify(error),
       });
     } finally {
       setLoading(false);
