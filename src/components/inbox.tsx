@@ -7,7 +7,7 @@ export const Inbox = () => {
     <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-screen">
       <h1 className="text-2xl font-bold">Inbox</h1>
 
-      <div className="w-[calc(100%-16rem)]">
+      <div className="w-full lg:w-[calc(100%-16rem)]">
         <Alert className="flex justify-between">
           <div>
             <Terminal className="h-4 w-4 my-2" />

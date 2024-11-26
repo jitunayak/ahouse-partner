@@ -17,9 +17,12 @@ import { Calendar, Home, Inbox, Search, Settings, Mail } from "lucide-react";
 import { Button } from "./button";
 import { Link, useRouter } from "@tanstack/react-router";
 import { useAuthStore } from "@/hooks";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const router = useRouter();
+  const [selectedTab, setSelectedTab] = useState(0);
+
   const [user, setUser] = useState<User | null>(null);
   const items = [
     {
@@ -68,21 +71,24 @@ export function AppSidebar() {
         <img
           src={auth.user?.logo_url}
           alt="logo"
-          className="h-14 object-contain scale-120"
+          className="h-10 mt-4 object-contain self-center"
         />
-        <Button variant={"secondary"} className="flex items-center gap-2">
-          <Mail className="w-2 h-2" />
-          <span className="text-xs">{user?.email}</span>
-        </Button>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup />
-        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
         <SidebarGroupContent>
           <SidebarMenu>
-            {items.map((item) => (
+            {items.map((item, index) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild className="px-4">
+                <SidebarMenuButton
+                  asChild
+                  className={cn(
+                    "ml-2 border-l-4 rounded-none border-l-transparent",
+                    selectedTab === index ? "border-l-blue-500 " : ""
+                  )}
+                  onClick={() => setSelectedTab(index)}
+                >
                   <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
@@ -94,11 +100,13 @@ export function AppSidebar() {
         </SidebarGroupContent>
       </SidebarContent>
       <SidebarFooter>
+        <Mail className="w-4 h-4" />
+        <span className="text-xs">{user?.email}</span>
         <span className="text-xs">Version : 1.0.0</span>
         <Button
           variant="secondary"
           onClick={() => handleSignOut()}
-          className="bg-red-50 text-red-600"
+          className=""
         >
           Log out
         </Button>
