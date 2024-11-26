@@ -23,6 +23,7 @@ import {
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
 import { useAuthStore } from "@/hooks";
+import { ShieldCheck } from "lucide-react";
 
 export function LoginForm() {
   const router = useRouter();
@@ -76,11 +77,13 @@ export function LoginForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleLogin)}
-        className="space-y-8 mt-28"
+        className="space-y-8 mt-28 mx-12 z-30"
       >
-        <Card className="mx-auto max-w-sm">
+        <Card className="mx-auto max-w-sm border-none shadow-none">
           <CardHeader>
-            <CardTitle className="text-2xl">Login</CardTitle>
+            <CardTitle className="text-2xl flex flex-row items-center gap-2">
+              Login <ShieldCheck size={20} className="text-green-500" />
+            </CardTitle>
             <CardDescription>
               Enter your email below to login to your account
             </CardDescription>
@@ -98,7 +101,7 @@ export function LoginForm() {
                         <Input
                           id="email"
                           type="email"
-                          placeholder="m@example.com"
+                          placeholder="m@bankdomain.com"
                           {...field}
                         />
                       </FormControl>
@@ -128,13 +131,13 @@ export function LoginForm() {
                 />
               </div>
               <Button type="submit" isLoading={loading} className="w-full">
-                Login
+                Sign in
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              Don&apos;t have an account?{" "}
+              Forgot account password?{" "}
               <a href="#" className="underline">
-                Sign up
+                Reset
               </a>
             </div>
           </CardContent>
