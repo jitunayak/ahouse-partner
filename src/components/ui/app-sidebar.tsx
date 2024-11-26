@@ -4,20 +4,19 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { supabase } from "@/supabaseClient";
-import { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
-import { Calendar, Home, Inbox, Search, Settings, Mail } from "lucide-react";
-import { Button } from "./button";
-import { Link, useRouter } from "@tanstack/react-router";
 import { useAuthStore } from "@/hooks";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/supabaseClient";
+import { User } from "@supabase/supabase-js";
+import { Link, useRouter } from "@tanstack/react-router";
+import { Calendar, Home, Inbox, Mail, Search, Settings } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Button } from "./button";
 
 export function AppSidebar() {
   const router = useRouter();
