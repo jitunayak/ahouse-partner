@@ -264,7 +264,7 @@ export function UserManagement() {
   }
   return (
     <div className="w-screen">
-      <div className="p-8 w-[calc(100%-16rem)] ">
+      <div className="p-8 lg:w-[calc(100%-16rem)] ">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
           <Input
