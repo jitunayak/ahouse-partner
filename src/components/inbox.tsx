@@ -63,7 +63,7 @@ export const Inbox = () => {
                   </Button>
                   <Button variant="default" size={"sm"}>
                     <CheckCheckIcon className="h-4 w-4" />
-                    Approve
+                    Publish
                   </Button>
                 </div>
               </Alert>

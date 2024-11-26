@@ -84,7 +84,7 @@ export function AppSidebar() {
                   asChild
                   className={cn(
                     "ml-2 border-l-4 rounded-none border-l-transparent",
-                    selectedTab === index ? "border-l-blue-500 " : ""
+                    selectedTab === index ? "border-l-primary " : ""
                   )}
                   onClick={() => setSelectedTab(index)}
                 >
