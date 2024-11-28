@@ -1,10 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { UserManagement } from "@/components/user-management";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/home/_home/")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  return <UserManagement />;
+  const router = useRouter();
+  useEffect(() => {
+    router.navigate({ to: "/home/management" });
+  }, []);
 }
