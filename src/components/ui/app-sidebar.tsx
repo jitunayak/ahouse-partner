@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useRouter } from "@tanstack/react-router";
-import { Calendar, Home, Inbox, Mail, Search, Settings } from "lucide-react";
+import { Home, Inbox, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
@@ -30,22 +30,6 @@ const items = [
     title: "Inbox",
     url: "/home/inbox",
     icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
   },
 ];
 export function AppSidebar() {

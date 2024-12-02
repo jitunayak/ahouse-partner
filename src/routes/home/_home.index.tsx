@@ -10,4 +10,6 @@ function RouteComponent() {
   useEffect(() => {
     router.navigate({ to: "/home/management" });
   }, []);
+
+  return null;
 }

@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,6 +9,22 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/supabaseClient";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useQueryClient } from "@tanstack/react-query";
+import { UserIcon } from "lucide-react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form";
 import {
   Select,
   SelectContent,
@@ -19,22 +34,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-  Form,
-} from "./ui/form";
-import { supabase } from "@/supabaseClient";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import { UserIcon } from "lucide-react";
 
 export function CreateUserModal() {
   const [loading, setLoading] = useState(false);
@@ -49,6 +48,7 @@ export function CreateUserModal() {
 
   type FormSchema = z.infer<typeof formSchema>;
   const form = useForm<FormSchema>({
+    mode: "onChange",
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
@@ -119,8 +119,8 @@ export function CreateUserModal() {
             </DialogHeader>
 
             <div className="grid gap-8 py-4">
-              <div className="grid grid-cols-1 items-center gap-4">
-                <div className="grid grid-cols-2 items-center gap-4">
+              <div className="grid grid-cols-1 items-center gap-8">
+                <div className="grid grid-cols-2 items-center gap-6">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -130,6 +130,11 @@ export function CreateUserModal() {
                         <FormControl>
                           <Input placeholder="John" {...field} />
                         </FormControl>
+                        {form.formState.errors?.firstName && (
+                          <FormMessage>
+                            {form.formState.errors?.firstName?.message}
+                          </FormMessage>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -198,11 +203,15 @@ export function CreateUserModal() {
               </div>
             </div>
             <DialogFooter>
-              <DialogClose asChild>
-                <Button type="button" variant="ghost">
-                  Cancel
-                </Button>
-              </DialogClose>
+              {/* <DialogClose asChild> */}
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => form.reset()}
+              >
+                Clear
+              </Button>
+              {/* </DialogClose> */}
               <Button type="submit" isLoading={loading}>
                 Submit
               </Button>

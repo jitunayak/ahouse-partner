@@ -198,11 +198,13 @@ export const columns: ColumnDef<any>[] = [
             <DropdownMenuItem
               onClick={() => navigator.clipboard.writeText(payment.id)}
             >
-              Copy payment ID
+              Copy email address
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Disable user</DropdownMenuItem>
+            <DropdownMenuItem className="text-red-600 bg-red-50">
+              Delete user
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -263,8 +265,8 @@ export function UserManagement() {
     return <div>{error.message}</div>;
   }
   return (
-    <div className="w-screen">
-      <div className="p-8 lg:w-[calc(100%-16rem)] ">
+    <div className="max-w-screen-2xl">
+      <div className="p-8 ">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
           <Input
@@ -306,7 +308,6 @@ export function UserManagement() {
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-
           <RefreshCwIcon
             onClick={() => refetch()}
             className={cn(
