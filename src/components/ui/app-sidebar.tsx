@@ -86,13 +86,30 @@ export function AppSidebar() {
                   asChild
                   className={cn(
                     "ml-2 border-l-4 rounded-none border-l-transparent",
-                    selectedTab === index ? "border-l-primary " : ""
+                    selectedTab === index
+                      ? "border-l-primary bg-neutral-100"
+                      : ""
                   )}
                   onClick={() => setSelectedTab(index)}
                 >
                   <Link href={item.url}>
-                    <item.icon />
-                    <span>{item.title}</span>
+                    <item.icon
+                      className={cn(
+                        selectedTab === index
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      )}
+                    />
+                    <span
+                      className={cn(
+                        "ml-2 font-medium",
+                        selectedTab === index
+                          ? "text-primary"
+                          : "text-muted-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
