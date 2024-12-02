@@ -1,11 +1,11 @@
 {
   "name": "ahouse-partner",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "npx cross-env VITE_APP_VERSION=$npm_package_version vite",
+    "build": "tsc -b && npx cross-env VITE_APP_VERSION=$npm_package_version vite build ",
     "lint": "eslint .",
     "preview": "vite preview"
   },
@@ -25,6 +25,7 @@
     "@tanstack/react-table": "^8.20.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "immer": "10.1.1",
     "lucide-react": "^0.460.0",
     "next-themes": "^0.4.3",
     "react": "^18.3.1",

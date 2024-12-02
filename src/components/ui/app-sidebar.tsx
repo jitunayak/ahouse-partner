@@ -9,58 +9,60 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useAuthStore } from "@/hooks";
+import { useStore } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useRouter } from "@tanstack/react-router";
 import { Calendar, Home, Inbox, Mail, Search, Settings } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
 
+const items = [
+  {
+    title: "Home",
+    url: "/home/management",
+    icon: Home,
+  },
+  {
+    title: "Inbox",
+    url: "/home/inbox",
+    icon: Inbox,
+  },
+  {
+    title: "Calendar",
+    url: "#",
+    icon: Calendar,
+  },
+
+  {
+    title: "Search",
+    url: "#",
+    icon: Search,
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings,
+  },
+];
 export function AppSidebar() {
   const router = useRouter();
+  const { signOut, logo_url } = useStore(
+    useShallow((s) => ({ signOut: s.signout, logo_url: s.user?.logo_url }))
+  );
   const [selectedTab, setSelectedTab] = useState(0);
-
   const [user, setUser] = useState<User | null>(null);
-  const items = [
-    {
-      title: "Home",
-      url: "/home/management",
-      icon: Home,
-    },
-    {
-      title: "Inbox",
-      url: "/home/inbox",
-      icon: Inbox,
-    },
-    {
-      title: "Calendar",
-      url: "#",
-      icon: Calendar,
-    },
 
-    {
-      title: "Search",
-      url: "#",
-      icon: Search,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: Settings,
-    },
-  ];
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
   });
 
-  const auth = useAuthStore();
-
   const handleSignOut = async () => {
-    await auth.signout();
+    await signOut();
     router.navigate({ to: "/login", replace: true });
   };
 
@@ -68,7 +70,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader className="flex items-start">
         <img
-          src={auth.user?.logo_url}
+          src={logo_url}
           alt="logo"
           className="h-10 mt-4 object-contain self-center"
         />
@@ -101,7 +103,9 @@ export function AppSidebar() {
       <SidebarFooter>
         <Mail className="w-4 h-4" />
         <span className="text-xs">{user?.email}</span>
-        <span className="text-xs">Version : 1.0.0</span>
+        <span className="text-xs">
+          Version : {import.meta.env.VITE_APP_VERSION}
+        </span>
         <Button
           variant="secondary"
           onClick={() => handleSignOut()}

@@ -37,13 +37,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CreateUserModal } from "./create-user-modal";
+import { useStore } from "@/hooks";
+import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
-import { Badge } from "./ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
-import { useAuthStore } from "@/hooks";
+import { CreateUserModal } from "./create-user-modal";
+import { Badge } from "./ui/badge";
 
 export const columns: ColumnDef<any>[] = [
   {
@@ -216,7 +216,7 @@ export function UserManagement() {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const { user } = useAuthStore();
+  const user = useStore.getState().user;
 
   const fetchAllProfiles = async () => {
     return await supabase

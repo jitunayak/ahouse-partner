@@ -1,17 +1,20 @@
-import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { useAuthStore } from "@/hooks";
+import { useStore } from "@/hooks";
+import { createFileRoute, Outlet } from "@tanstack/react-router";
+import { useShallow } from "zustand/react/shallow";
 
 export const Route = createFileRoute("/home/_home")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const auth = useAuthStore();
+  const { login, user } = useStore(
+    useShallow((s) => ({ user: s.user, login: s.login }))
+  );
 
-  if (auth.user === null) {
-    auth.login();
+  if (user === null) {
+    login();
     return null;
   }
 

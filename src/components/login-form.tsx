@@ -7,11 +7,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useStore } from "@/hooks";
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "@tanstack/react-router";
+import { ShieldCheck } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+import { useShallow } from "zustand/react/shallow";
 import {
   Form,
   FormControl,
@@ -20,22 +25,21 @@ import {
   FormLabel,
   FormMessage,
 } from "./ui/form";
-import { toast } from "sonner";
-import { useRouter } from "@tanstack/react-router";
-import { useAuthStore } from "@/hooks";
-import { ShieldCheck } from "lucide-react";
+
+const formSchema = z.object({
+  email: z.string().email("Invalid email"),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
 
 export function LoginForm() {
   const router = useRouter();
-  const auth = useAuthStore();
-
-  const formSchema = z.object({
-    email: z.string().email("Invalid email"),
-    password: z
-      .string()
-      .min(6, { message: "Password must be at least 6 characters" }),
-  });
   const [loading, setLoading] = useState(false);
+
+  const { user, session, login } = useStore(
+    useShallow((s) => ({ user: s.user, session: s.session, login: s.login }))
+  );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,7 +61,7 @@ export function LoginForm() {
           return;
         }
         if (data) {
-          auth.login().then(() => {
+          login().then(() => {
             router.navigate({ to: "/home", replace: true });
           });
         }
@@ -68,7 +72,7 @@ export function LoginForm() {
   };
 
   useEffect(() => {
-    if (auth.user && auth.session) {
+    if (user && session) {
       router.navigate({ to: "/home", replace: true });
     }
   }, []);
