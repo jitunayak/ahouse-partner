@@ -10,6 +10,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useStore } from "@/hooks";
+import { ModeToggle } from "@/hooks/mode-toggle";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
@@ -85,10 +86,8 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    "ml-2 border-l-4 rounded-none border-l-transparent",
-                    selectedTab === index
-                      ? "border-l-primary bg-neutral-100"
-                      : ""
+                    "ml-2 border-l-4 rounded-none border-l-transparent p-5",
+                    selectedTab === index ? "border-l-primary bg-secondary" : ""
                   )}
                   onClick={() => setSelectedTab(index)}
                 >
@@ -120,9 +119,12 @@ export function AppSidebar() {
       <SidebarFooter>
         <Mail className="w-4 h-4" />
         <span className="text-xs">{user?.email}</span>
-        <span className="text-xs">
-          Version : {import.meta.env.VITE_APP_VERSION}
-        </span>
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-xs">
+            Version : {import.meta.env.VITE_APP_VERSION}
+          </span>
+          <ModeToggle />
+        </div>
         <Button
           variant="secondary"
           onClick={() => handleSignOut()}
