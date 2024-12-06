@@ -4,6 +4,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -66,7 +67,7 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup />
-        {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
+        <SidebarGroupLabel>Application</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
             {items.map((item, index) => (
@@ -105,12 +106,14 @@ export function AppSidebar() {
         </SidebarGroupContent>
       </SidebarContent>
       <SidebarFooter>
-        <Mail className="w-4 h-4" />
         <div className="space-y-0">
           <div className="text-md font-semibold">
             {userInfo?.first_name} {userInfo?.last_name}
           </div>
-          <div className="text-sm text-muted-foreground">{user?.email}</div>
+          <span className="flex items-center gap-2">
+            <Mail className="w-4 h-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">{user?.email}</span>
+          </span>
         </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs">
