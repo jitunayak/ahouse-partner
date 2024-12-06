@@ -265,8 +265,8 @@ export function UserManagement() {
     return <div>{error.message}</div>;
   }
   return (
-    <div className="max-w-screen-2xl">
-      <div className="p-8 ">
+    <div className="h-screen w-screen">
+      <div className="p-8 w-full">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
           <Input

@@ -15,8 +15,9 @@ import { ModeToggle } from "@/hooks/mode-toggle";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
-import { Link, useRouter } from "@tanstack/react-router";
+import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { Home, Inbox, Mail } from "lucide-react";
+// import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
@@ -35,6 +36,7 @@ const items = [
 ];
 export function AppSidebar() {
   const router = useRouter();
+  const location = useLocation();
   const { signOut, logo_url, userInfo } = useStore(
     useShallow((s) => ({
       signOut: s.signout,
@@ -42,7 +44,8 @@ export function AppSidebar() {
       userInfo: s.user,
     }))
   );
-  const [selectedTab, setSelectedTab] = useState(0);
+  // const [selectedTab, setSelectedTab] = useQueryState("management");
+  const [selectedTab, setSelectedTab] = useState(location.pathname);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -57,7 +60,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar>
+    <Sidebar variant="floating">
       <SidebarHeader className="flex items-start">
         <img
           src={logo_url}
@@ -70,20 +73,22 @@ export function AppSidebar() {
         <SidebarGroupLabel>Application</SidebarGroupLabel>
         <SidebarGroupContent>
           <SidebarMenu>
-            {items.map((item, index) => (
+            {items.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton
                   asChild
                   className={cn(
                     "ml-2 border-l-4 rounded-none border-l-transparent p-5",
-                    selectedTab === index ? "border-l-primary bg-secondary" : ""
+                    selectedTab === item.url
+                      ? "border-l-primary bg-secondary"
+                      : ""
                   )}
-                  onClick={() => setSelectedTab(index)}
+                  onClick={() => setSelectedTab(item.url)}
                 >
                   <Link href={item.url}>
                     <item.icon
                       className={cn(
-                        selectedTab === index
+                        selectedTab === item.url
                           ? "text-primary"
                           : "text-muted-foreground"
                       )}
@@ -91,7 +96,7 @@ export function AppSidebar() {
                     <span
                       className={cn(
                         "ml-2 font-medium",
-                        selectedTab === index
+                        selectedTab === item.url
                           ? "text-primary"
                           : "text-muted-foreground"
                       )}

@@ -10,7 +10,6 @@ function RouteComponent() {
   const router = useRouter();
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log({ session });
       if (session) {
         router.navigate({ to: "/home", replace: true });
       } else {
