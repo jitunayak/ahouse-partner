@@ -41,10 +41,10 @@ import { useStore } from "@/hooks";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useQueryState } from "nuqs";
+import { useEffect, useState } from "react";
 import { CreateUserModal } from "./create-user-modal";
 import { Badge } from "./ui/badge";
-
 export const columns: ColumnDef<any>[] = [
   {
     id: "select",
@@ -217,6 +217,11 @@ export function UserManagement() {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
+  const [emailFilter, setEmailFilter] = useQueryState("email");
+
+  useEffect(() => {
+    table.getColumn("email_address")?.setFilterValue(emailFilter || null);
+  }, []);
 
   const user = useStore.getState().user;
 
@@ -264,22 +269,21 @@ export function UserManagement() {
   if (error) {
     return <div>{error.message}</div>;
   }
+
   return (
-    <div className="h-screen w-screen">
+    <div className="h-screen w-full">
       <div className="p-8 w-full">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
           <Input
             placeholder="Filter emails..."
-            value={
-              (table.getColumn("email_address")?.getFilterValue() as string) ??
-              ""
-            }
-            onChange={(event) =>
+            value={emailFilter || ""}
+            onChange={(event) => {
+              setEmailFilter(event.target.value || null);
               table
                 .getColumn("email_address")
-                ?.setFilterValue(event.target.value)
-            }
+                ?.setFilterValue(event.target.value);
+            }}
             className="max-w-sm"
           />
           <DropdownMenu>

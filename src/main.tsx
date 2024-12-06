@@ -3,7 +3,7 @@ import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 // Import the generated route tree
-// import { NuqsAdapter } from "nuqs/adapters/react";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { ThemeProvider } from "./components/theme.provider";
 import { routeTree } from "./routeTree.gen";
 
@@ -24,9 +24,9 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        {/* <NuqsAdapter> */}
-        <RouterProvider router={router} />
-        {/* </NuqsAdapter> */}
+        <NuqsAdapter>
+          <RouterProvider router={router} />
+        </NuqsAdapter>
       </ThemeProvider>
     </StrictMode>
   );

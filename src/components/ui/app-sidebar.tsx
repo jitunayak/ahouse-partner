@@ -60,7 +60,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="floating">
+    <Sidebar variant="sidebar">
       <SidebarHeader className="flex items-start">
         <img
           src={logo_url}
