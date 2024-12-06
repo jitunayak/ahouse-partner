@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
+import { Route as R403Import } from './routes/403'
 import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeImport } from './routes/home/_home'
 import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
@@ -35,6 +36,12 @@ const HomeRoute = HomeImport.update({
 const LoginRoute = LoginImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const R403Route = R403Import.update({
+  id: '/403',
+  path: '/403',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -76,6 +83,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/403': {
+      id: '/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof R403Import
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -153,6 +167,7 @@ const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/403': typeof R403Route
   '/login': typeof LoginRoute
   '/home': typeof HomeHomeRouteWithChildren
   '/home/inbox': typeof HomeHomeInboxRoute
@@ -162,6 +177,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/403': typeof R403Route
   '/login': typeof LoginRoute
   '/home': typeof HomeHomeIndexRoute
   '/home/inbox': typeof HomeHomeInboxRoute
@@ -171,6 +187,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/403': typeof R403Route
   '/login': typeof LoginRoute
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
@@ -183,16 +200,18 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/403'
     | '/login'
     | '/home'
     | '/home/inbox'
     | '/home/management'
     | '/home/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/home' | '/home/inbox' | '/home/management'
+  to: '/' | '/403' | '/login' | '/home' | '/home/inbox' | '/home/management'
   id:
     | '__root__'
     | '/'
+    | '/403'
     | '/login'
     | '/home'
     | '/home/_home'
@@ -204,12 +223,14 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  R403Route: typeof R403Route
   LoginRoute: typeof LoginRoute
   HomeRoute: typeof HomeRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  R403Route: R403Route,
   LoginRoute: LoginRoute,
   HomeRoute: HomeRouteWithChildren,
 }
@@ -225,12 +246,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/403",
         "/login",
         "/home"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/403": {
+      "filePath": "403.tsx"
     },
     "/login": {
       "filePath": "login.tsx"

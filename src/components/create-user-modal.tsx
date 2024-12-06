@@ -9,14 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/supabaseClient";
+import { useApi } from "@/hooks";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
-import { UserIcon } from "lucide-react";
-import { useState } from "react";
+import { CircleX, UserIcon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
+import { SubmitBtnArrowRightIcon } from "./animated-icons";
+import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import {
   Form,
   FormControl,
@@ -35,21 +35,25 @@ import {
   SelectValue,
 } from "./ui/select";
 
+const IUserCreateInput = z.object({
+  firstName: z.string().min(1, { message: "first name can not be empty" }),
+  lastName: z.string().min(1, { message: "last name can not be empty" }),
+  email: z.string().email().min(1),
+  role: z.enum(["org-admin", "collector"]),
+});
+
+export type IUserCreateInput = z.infer<typeof IUserCreateInput>;
+
 export function CreateUserModal() {
-  const [loading, setLoading] = useState(false);
-  const queryClient = useQueryClient();
+  const { userApi } = useApi();
+  const { isError, isPending, mutate, error, isSuccess } = userApi.create();
 
-  const formSchema = z.object({
-    firstName: z.string().min(1),
-    lastName: z.string().min(1),
-    email: z.string().email().min(1),
-    role: z.enum(["org-admin", "collector"]),
-  });
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
 
-  type FormSchema = z.infer<typeof formSchema>;
-  const form = useForm<FormSchema>({
+  const form = useForm<IUserCreateInput>({
     mode: "onChange",
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(IUserCreateInput),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -58,49 +62,15 @@ export function CreateUserModal() {
     },
   });
 
-  async function handleUseCreation(values: FormSchema) {
-    setLoading(true);
-    try {
-      const response = await fetch("/api/v1/create-account", {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${
-            (await supabase.auth.getSession()).data.session?.access_token
-          }`,
-        },
-        method: "POST",
-        body: JSON.stringify({
-          email: values.email,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          role: values.role,
-        }),
-      });
-
-      const data = await response.json();
-      if (!response.ok) {
-        toast.error("Failed to create user", {
-          description: data.error,
-        });
-        return;
-      }
-      toast.success("User created successfully", {
-        description: "User need to reset password upon login",
-      });
-    } catch (error) {
-      console.log({ error });
-      toast.error("Failed to create user", {
-        description: (error as Error).message + JSON.stringify(error),
-      });
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (isSuccess) {
       form.reset();
-      queryClient.invalidateQueries({ queryKey: ["profiles"] });
+      close();
     }
-  }
+  }, [isSuccess]);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="default" size={"sm"}>
           <UserIcon className="w-4 h-4 mr-2" />
@@ -110,7 +80,7 @@ export function CreateUserModal() {
 
       <DialogContent className="sm:max-w-[425px]">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(handleUseCreation)}>
+          <form onSubmit={form.handleSubmit(() => mutate(form.getValues()))}>
             <DialogHeader className="pb-8">
               <DialogTitle>Create new account</DialogTitle>
               <DialogDescription>
@@ -119,8 +89,8 @@ export function CreateUserModal() {
             </DialogHeader>
 
             <div className="grid gap-8 py-4">
-              <div className="grid grid-cols-1 items-center gap-8">
-                <div className="grid grid-cols-2 items-center gap-6">
+              <div className="grid grid-cols-1 items-center gap-6">
+                <div className="grid grid-cols-2 items-center gap-4">
                   <FormField
                     control={form.control}
                     name="firstName"
@@ -130,11 +100,6 @@ export function CreateUserModal() {
                         <FormControl>
                           <Input placeholder="John" {...field} />
                         </FormControl>
-                        {form.formState.errors?.firstName && (
-                          <FormMessage>
-                            {form.formState.errors?.firstName?.message}
-                          </FormMessage>
-                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -201,9 +166,18 @@ export function CreateUserModal() {
                   )}
                 />
               </div>
+              {isError && (
+                <Alert variant="destructive">
+                  <CircleX className="w-4 h-4" />
+                  <AlertTitle>Failed to create</AlertTitle>
+                  <AlertDescription>
+                    Try after sometime! {error.message}
+                  </AlertDescription>
+                </Alert>
+              )}
             </div>
+
             <DialogFooter>
-              {/* <DialogClose asChild> */}
               <Button
                 type="button"
                 variant="ghost"
@@ -211,10 +185,11 @@ export function CreateUserModal() {
               >
                 Clear
               </Button>
-              {/* </DialogClose> */}
-              <Button type="submit" isLoading={loading}>
-                Submit
-              </Button>
+              <SubmitBtnArrowRightIcon
+                type="submit"
+                isLoading={isPending}
+                disabled={isPending}
+              />
             </DialogFooter>
           </form>
         </Form>

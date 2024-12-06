@@ -1,6 +1,6 @@
-import * as React from "react";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { supabase } from "@/supabaseClient";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import * as React from "react";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -10,6 +10,7 @@ function RouteComponent() {
   const router = useRouter();
   React.useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log({ session });
       if (session) {
         router.navigate({ to: "/home", replace: true });
       } else {

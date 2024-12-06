@@ -34,8 +34,12 @@ const items = [
 ];
 export function AppSidebar() {
   const router = useRouter();
-  const { signOut, logo_url } = useStore(
-    useShallow((s) => ({ signOut: s.signout, logo_url: s.user?.logo_url }))
+  const { signOut, logo_url, userInfo } = useStore(
+    useShallow((s) => ({
+      signOut: s.signout,
+      logo_url: s.user?.logo_url,
+      userInfo: s.user,
+    }))
   );
   const [selectedTab, setSelectedTab] = useState(0);
   const [user, setUser] = useState<User | null>(null);
@@ -102,7 +106,12 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <Mail className="w-4 h-4" />
-        <span className="text-xs">{user?.email}</span>
+        <div className="space-y-0">
+          <div className="text-md font-semibold">
+            {userInfo?.first_name} {userInfo?.last_name}
+          </div>
+          <div className="text-sm text-muted-foreground">{user?.email}</div>
+        </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs">
             Version : {import.meta.env.VITE_APP_VERSION}
