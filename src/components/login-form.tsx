@@ -48,23 +48,28 @@ export function LoginForm() {
       password: "",
     },
   });
-  const handleLogin = async () => {
+  const handleSubmit = async () => {
     setLoading(true);
-   const { data, error } = await supabase.auth.signInWithPassword({
-     email: form.getValues().email,
-     password: form.getValues().password,
-   });
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: form.getValues().email,
+      password: form.getValues().password,
+    });
 
-   if (error) {
-     toast.error(error.message);
-     return;
-   }
-   if (data) {
-     login().then(() => {
-       router.navigate({ to: "/home", replace: true });
-     });
-   }
-   setLoading(false);
+    if (error) {
+      toast.error(error.message);
+      setLoading(false);
+      form.setError("password", {
+        type: "manual",
+        message: "Wrong email or password",
+      });
+      return;
+    }
+    if (data) {
+      login().then(() => {
+        router.navigate({ to: "/home", replace: true });
+      });
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -76,7 +81,7 @@ export function LoginForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(handleLogin)}
+        onSubmit={form.handleSubmit(handleSubmit)}
         className="space-y-8 mt-28 mx-12 z-30"
       >
         <Card className="mx-auto max-w-sm border-none shadow-none">
@@ -102,6 +107,7 @@ export function LoginForm() {
                           id="email"
                           type="email"
                           placeholder="m@bankdomain.com"
+                          autoComplete="email"
                           {...field}
                         />
                       </FormControl>
@@ -122,6 +128,7 @@ export function LoginForm() {
                           id="password"
                           type="password"
                           placeholder="********"
+                          autoComplete="current-password"
                           {...field}
                         />
                       </FormControl>

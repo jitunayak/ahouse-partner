@@ -1,7 +1,8 @@
 import { Toaster } from "@/components/ui/sonner";
 import { useStore } from "@/hooks";
+import { queryClient } from "@/lib";
 import { supabase } from "@/supabaseClient";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Outlet, createRootRoute, useRouter } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import * as React from "react";
@@ -12,15 +13,6 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const queryClient = new QueryClient({
-    defaultOptions: {
-      queries: {
-        staleTime: Infinity,
-        refetchOnReconnect: true,
-        refetchOnWindowFocus: true,
-      },
-    },
-  });
   const router = useRouter();
   const { signOut } = useStore(useShallow((s) => ({ signOut: s.signout })));
 
