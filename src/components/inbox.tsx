@@ -1,28 +1,11 @@
-import { useStore } from "@/hooks";
-import { supabase } from "@/supabaseClient";
-import { useQuery } from "@tanstack/react-query";
+import { useApi } from "@/hooks";
 import { CheckCheckIcon, Terminal, Trash2Icon } from "lucide-react";
-import { useShallow } from "zustand/react/shallow";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 
 export const Inbox = () => {
-  const { user } = useStore(useShallow((s) => ({ user: s.user })));
-  const getUnApprovedAuctions = async () => {
-    const { data, error } = await supabase
-      .from("auctions")
-      .select("id, title, description, status, images, case_number")
-      .eq("org_id", user?.org_id);
-    if (error) {
-      throw new Error(error.message);
-    }
-    return data;
-  };
-
-  const { data, isPending, error, isSuccess, isError } = useQuery({
-    queryKey: ["auctions", user?.org_id],
-    queryFn: getUnApprovedAuctions,
-  });
+  const { auctionsApi } = useApi();
+  const { data, isPending, error, isSuccess, isError } = auctionsApi.list();
 
   if (isPending || !isSuccess) return <p>Loading...</p>;
 

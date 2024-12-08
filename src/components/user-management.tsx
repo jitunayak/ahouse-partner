@@ -37,10 +37,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useStore } from "@/hooks";
+import { useApi } from "@/hooks";
 import { cn } from "@/lib/utils";
-import { supabase } from "@/supabaseClient";
-import { useQuery } from "@tanstack/react-query";
 import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { CreateUserModal } from "./create-user-modal";
@@ -223,29 +221,15 @@ export function UserManagement() {
     table.getColumn("email_address")?.setFilterValue(emailFilter || null);
   }, []);
 
-  const user = useStore.getState().user;
-
-  const fetchAllProfiles = async () => {
-    return await supabase
-      .from("profiles_with_org_and_creator")
-      .select(
-        `id, email_address, full_name, org_name, role, created_at, created_by`
-      )
-      .eq("org_id", user?.org_id)
-      .order("id", { ascending: false });
-  };
+  const { userApi } = useApi();
 
   const {
-    isPending,
-    data: allProfiles,
     error,
-    refetch,
+    data: allProfiles,
+    isPending,
     isRefetching,
-  } = useQuery({
-    queryKey: ["profiles", user?.org_id],
-    queryFn: fetchAllProfiles,
-    enabled: !!user?.org_id,
-  });
+    refetch,
+  } = userApi.list();
 
   const table = useReactTable({
     data: allProfiles?.data ?? [],
