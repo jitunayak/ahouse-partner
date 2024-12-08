@@ -50,25 +50,21 @@ export function LoginForm() {
   });
   const handleLogin = async () => {
     setLoading(true);
-    supabase.auth
-      .signInWithPassword({
-        email: form.getValues().email,
-        password: form.getValues().password,
-      })
-      .then(({ error, data }) => {
-        if (error) {
-          toast.error(error.message);
-          return;
-        }
-        if (data) {
-          login().then(() => {
-            router.navigate({ to: "/home", replace: true });
-          });
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+   const { data, error } = await supabase.auth.signInWithPassword({
+     email: form.getValues().email,
+     password: form.getValues().password,
+   });
+
+   if (error) {
+     toast.error(error.message);
+     return;
+   }
+   if (data) {
+     login().then(() => {
+       router.navigate({ to: "/home", replace: true });
+     });
+   }
+   setLoading(false);
   };
 
   useEffect(() => {

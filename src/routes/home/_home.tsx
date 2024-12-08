@@ -21,7 +21,7 @@ function RouteComponent() {
   return (
     <SidebarProvider defaultOpen>
       <AppSidebar />
-      <main>
+      <main className="flex flex-1 flex-col">
         <SidebarTrigger />
         <Outlet />
       </main>
