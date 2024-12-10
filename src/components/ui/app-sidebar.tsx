@@ -17,7 +17,6 @@ import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
 import { Home, Inbox, Mail } from "lucide-react";
-// import { useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
