@@ -32,7 +32,7 @@ function RootComponent() {
       <QueryClientProvider client={queryClient}>
         <Outlet />
         <Toaster richColors theme="light" expand closeButton />
-        {process.env.NODE_ENV === "production" && (
+        {process.env.NODE_ENV !== "production" && (
           <TanStackRouterDevtools position="bottom-right" />
         )}
         <ReactQueryDevtools initialIsOpen={false} />

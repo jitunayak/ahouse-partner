@@ -82,7 +82,7 @@ export function AppSidebar() {
                   )}
                   onClick={() => setSelectedTab(item.url)}
                 >
-                  <Link href={item.url}>
+                  <Link to={item.url} preload="intent">
                     <item.icon
                       className={cn(
                         selectedTab === item.url
