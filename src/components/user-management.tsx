@@ -15,6 +15,7 @@ import {
   ChevronDown,
   MoreHorizontal,
   RefreshCwIcon,
+  Search,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,17 @@ export const columns: ColumnDef<any>[] = [
         aria-label="Select all"
       />
     ),
+    /*************  ✨ Codeium Command ⭐  *************/
+    /**
+     * Cell renderer for the `select` column.
+     *
+     * @description
+     * A checkbox that is checked if the row is selected, and unchecked if the row is not
+     * selected. The checkbox is also indeterminate if the user has selected some rows on
+     * the current page, but not all rows. When the checkbox is clicked, the row is
+     * toggled as selected or deselected.
+     */
+    /******  0d7b3e79-f898-4431-ae31-c8ef193fda14  *******/
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
@@ -67,23 +79,6 @@ export const columns: ColumnDef<any>[] = [
     enableHiding: false,
   },
 
-  {
-    accessorKey: "id",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          id
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <div className="lowercase text-xs">{row.getValue("id")}</div>
-    ),
-  },
   {
     accessorKey: "email_address",
     header: ({ column }) => {
@@ -255,21 +250,26 @@ export function UserManagement() {
   }
 
   return (
-    <div className="h-screen w-full">
-      <div className="p-8 w-full">
+    <div className="h-screen">
+      <div className="m-4 rounded-lg p-6 shadow-sm border bg-background">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
-          <Input
-            placeholder="Filter emails..."
-            value={emailFilter || ""}
-            onChange={(event) => {
-              setEmailFilter(event.target.value || null);
-              table
-                .getColumn("email_address")
-                ?.setFilterValue(event.target.value);
-            }}
-            className="max-w-sm"
-          />
+          <div className="relative">
+            <Input
+              placeholder="Filter emails..."
+              value={emailFilter || ""}
+              onChange={(event) => {
+                setEmailFilter(event.target.value || null);
+                table
+                  .getColumn("email_address")
+                  ?.setFilterValue(event.target.value);
+              }}
+              className="max-w-sm pl-10"
+            />
+            <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
+              <Search size={16} strokeWidth={2} />
+            </div>
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="ml-auto">
@@ -303,7 +303,7 @@ export function UserManagement() {
             )}
           />
         </div>
-        <div className="rounded-md border ">
+        <div className="rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (

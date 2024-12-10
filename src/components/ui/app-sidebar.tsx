@@ -37,10 +37,10 @@ const items = [
 export function AppSidebar() {
   const router = useRouter();
   const location = useLocation();
-  const { signOut, logo_url, userInfo } = useStore(
+  const { signOut, logoUrl, userInfo } = useStore(
     useShallow((s) => ({
       signOut: s.signout,
-      logo_url: s.user?.logo_url,
+      logoUrl: s.user?.logo_url,
       userInfo: s.user,
     }))
   );
@@ -63,7 +63,7 @@ export function AppSidebar() {
     <Sidebar variant="sidebar">
       <SidebarHeader className="flex items-start">
         <img
-          src={logo_url}
+          src={logoUrl}
           alt="logo"
           className="h-10 mt-4 object-contain self-center"
         />
@@ -74,14 +74,12 @@ export function AppSidebar() {
         <SidebarGroupContent>
           <SidebarMenu>
             {items.map((item) => (
-              <SidebarMenuItem key={item.title}>
+              <SidebarMenuItem key={item.title} className="mx-4">
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    "ml-2 border-l-4 rounded-none border-l-transparent p-5",
-                    selectedTab === item.url
-                      ? "border-l-primary bg-secondary"
-                      : ""
+                    " rounded-lg p-5 hover:bg-muted",
+                    selectedTab === item.url ? "bg-secondary" : ""
                   )}
                   onClick={() => setSelectedTab(item.url)}
                 >
@@ -112,12 +110,12 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <div className="space-y-0">
-          <div className="text-md font-semibold">
+          <div className="text-sm font-semibold">
             {userInfo?.first_name} {userInfo?.last_name}
           </div>
           <span className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{user?.email}</span>
+            <Mail className="w-3 h-3 text-muted-foreground" />
+            <span className="text-xs text-muted-foreground">{user?.email}</span>
           </span>
         </div>
         <div className="flex items-center justify-between gap-2">
