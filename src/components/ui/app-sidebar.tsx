@@ -59,7 +59,7 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="sidebar">
+    <Sidebar variant="sidebar" className="bg-primary">
       <SidebarHeader className="flex items-start">
         <img
           src={logoUrl}
