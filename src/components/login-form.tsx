@@ -69,9 +69,7 @@ export function LoginForm() {
       return;
     }
     if (data) {
-      login().then(() => {
-        router.navigate({ to: "/home", replace: true });
-      });
+      login();
     }
     setLoading(false);
   };
@@ -80,7 +78,7 @@ export function LoginForm() {
     if (user && session) {
       router.navigate({ to: "/home", replace: true });
     }
-  }, []);
+  }, [user]);
 
   return (
     <Form {...form}>

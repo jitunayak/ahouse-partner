@@ -43,8 +43,7 @@ export function AppSidebar() {
       userInfo: s.user,
     }))
   );
-  // const [selectedTab, setSelectedTab] = useQueryState("management");
-  const [selectedTab, setSelectedTab] = useState(location.pathname);
+
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
@@ -78,14 +77,16 @@ export function AppSidebar() {
                   asChild
                   className={cn(
                     " rounded-lg p-5 hover:bg-muted",
-                    selectedTab === item.url ? "bg-secondary" : ""
+                    location.pathname === item.url
+                      ? "bg-primary/10 hover:bg-primary/20"
+                      : ""
                   )}
-                  onClick={() => setSelectedTab(item.url)}
+                  onClick={() => router.navigate({ to: item.url })}
                 >
                   <Link to={item.url} preload="intent">
                     <item.icon
                       className={cn(
-                        selectedTab === item.url
+                        location.pathname === item.url
                           ? "text-primary"
                           : "text-muted-foreground"
                       )}
@@ -93,7 +94,7 @@ export function AppSidebar() {
                     <span
                       className={cn(
                         "ml-2 font-medium",
-                        selectedTab === item.url
+                        location.pathname === item.url
                           ? "text-primary"
                           : "text-muted-foreground"
                       )}
