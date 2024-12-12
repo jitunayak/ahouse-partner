@@ -1,7 +1,11 @@
 import { AppSidebar } from "@/components/ui/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { useStore } from "@/hooks";
-import { createFileRoute, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Outlet,
+  ScrollRestoration,
+} from "@tanstack/react-router";
 import { useShallow } from "zustand/react/shallow";
 
 export const Route = createFileRoute("/home/_home")({
@@ -23,6 +27,7 @@ function RouteComponent() {
       <AppSidebar />
       <main className="flex flex-1 flex-col bg-muted">
         <SidebarTrigger />
+        <ScrollRestoration />
         <Outlet />
       </main>
     </SidebarProvider>
