@@ -57,17 +57,6 @@ export const columns: ColumnDef<any>[] = [
         aria-label="Select all"
       />
     ),
-    /*************  ✨ Codeium Command ⭐  *************/
-    /**
-     * Cell renderer for the `select` column.
-     *
-     * @description
-     * A checkbox that is checked if the row is selected, and unchecked if the row is not
-     * selected. The checkbox is also indeterminate if the user has selected some rows on
-     * the current page, but not all rows. When the checkbox is clicked, the row is
-     * toggled as selected or deselected.
-     */
-    /******  0d7b3e79-f898-4431-ae31-c8ef193fda14  *******/
     cell: ({ row }) => (
       <Checkbox
         checked={row.getIsSelected()}
