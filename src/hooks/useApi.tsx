@@ -30,14 +30,14 @@ export const useApi = () => {
           }),
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: [QueryKeys.USERS],
+            queryKey: [QueryKeys.USERS, user?.org_id],
           });
         },
       }),
 
     list: () =>
       useQuery({
-        queryKey: [QueryKeys.USERS],
+        queryKey: [QueryKeys.USERS, user?.org_id],
         queryFn: async () =>
           await supabase
             .from("profiles_with_org_and_creator")

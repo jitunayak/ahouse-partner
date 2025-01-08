@@ -38,7 +38,7 @@ function HomeDashboard() {
           <Card>
             <div className="flex flex-row gap-2">
               <div className="text-sm ">Pending Assets</div>
-              <ArrowUpRightIcon className="h-4 w-4 hover:text-primary" />
+              <ArrowUpRightIcon className="h-4 w-4 hover:text-primary hover:scale-110" />
             </div>
             <div className="text-3xl text-red-400">
               {pendingAssets.data ? pendingAssets.data : 0}
