@@ -1,6 +1,7 @@
 import { useApi } from "@/hooks";
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRightIcon } from "lucide-react";
+import { ArrowUpRightIcon, FileDownIcon, PlusIcon } from "lucide-react";
+import { Button } from "./ui/button";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
@@ -27,6 +28,9 @@ function HomeDashboard() {
   return (
     <div className="p-10">
       <div className="text-3xl font-bold mb-10">Dashboard</div>
+
+      <div className="text-xl font-semibold mt-10 mb-4">Statistics</div>
+
       <div className="flex flex-row flex-wrap gap-2">
         <Card>
           <div className="text-sm ">Total Assets</div>
@@ -44,6 +48,22 @@ function HomeDashboard() {
               {pendingAssets.data ? pendingAssets.data : 0}
             </div>
           </Card>
+        </Link>
+      </div>
+
+      <div className="text-xl font-semibold mt-10 mb-4">Quick Actions</div>
+      <div className="flex flex-row flex-wrap gap-2">
+        <Button variant={"outline"} className="text-primary">
+          Add Asset <PlusIcon className="h-4 w-4" />
+        </Button>
+        <Button variant={"outline"} className="text-primary">
+          Generate Report <FileDownIcon className="h-4 w-4" />
+        </Button>
+
+        <Link to="/home/inbox">
+          <Button variant={"outline"} className="text-primary">
+            View Pending <ArrowUpRightIcon className="h-4 w-4" />
+          </Button>
         </Link>
       </div>
 
