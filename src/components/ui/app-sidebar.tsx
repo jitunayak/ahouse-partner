@@ -16,16 +16,21 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { Home, Inbox, Mail } from "lucide-react";
+import { Home, Inbox, Mail, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
 
 const items = [
   {
-    title: "Home",
-    url: "/home/management",
+    title: "Dashboard",
+    url: "/home",
     icon: Home,
+  },
+  {
+    title: "User Management",
+    url: "/home/management",
+    icon: User2,
   },
   {
     title: "Inbox",

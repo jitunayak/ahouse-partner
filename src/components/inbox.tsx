@@ -5,7 +5,8 @@ import { Button } from "./ui/button";
 
 export const Inbox = () => {
   const { auctionsApi } = useApi();
-  const { data, isPending, error, isSuccess, isError } = auctionsApi.list();
+  const { data, isPending, error, isSuccess, isError } =
+    auctionsApi.pendingItems();
 
   if (isPending || !isSuccess) return <p>Loading...</p>;
 

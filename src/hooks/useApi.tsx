@@ -66,6 +66,123 @@ export const useApi = () => {
         queryFn: getUnApprovedAuctions,
       });
     },
+    pendingItems: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("id, title, description, status, images, case_number")
+          .eq("org_id", user?.org_id)
+          .eq("status", "submitted");
+
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "pending"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+
+    totalAuctions: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id);
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "total"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+
+    totalPendingAssets: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("status", "submitted");
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+    totalVehicles: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("category", "vehicle");
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "vehicle"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+    totalLand: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("category", "land");
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "land"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+
+    totalRealEstate: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("category", "real-estate");
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "real-estate"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
+    totalGold: () => {
+      const getUnApprovedAuctions = async () => {
+        const { data, error } = await supabase
+          .from("auctions")
+          .select("*", { count: "exact" })
+          .eq("category", "gold");
+        if (error) {
+          throw new Error(error.message);
+        }
+        return data.length;
+      };
+      return useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "gold"],
+        queryFn: getUnApprovedAuctions,
+      });
+    },
   };
 
   return {
