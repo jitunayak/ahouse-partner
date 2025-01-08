@@ -1,9 +1,10 @@
 import { useApi } from "@/hooks";
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRightIcon } from "lucide-react";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-[180px] space-y-4 rounded-md border-neutral-200 p-4 border bg-background">
+    <div className="w-[180px] hover:shadow-sm space-y-4 rounded-md border-neutral-200 p-4 border bg-background">
       {children}
     </div>
   );
@@ -29,13 +30,16 @@ function HomeDashboard() {
       <div className="flex flex-row flex-wrap gap-2">
         <Card>
           <div className="text-sm ">Total Assets</div>
-          <div className="text-3xl text-green-600">
+          <div className="text-3xl  text-green-600">
             {totalAssets.data ? totalAssets.data : 0}
           </div>
         </Card>
         <Link to="/home/inbox">
           <Card>
-            <div className="text-sm ">Pending Assets</div>
+            <div className="flex flex-row gap-2">
+              <div className="text-sm ">Pending Assets</div>
+              <ArrowUpRightIcon className="h-4 w-4 hover:text-primary" />
+            </div>
             <div className="text-3xl text-red-400">
               {pendingAssets.data ? pendingAssets.data : 0}
             </div>
