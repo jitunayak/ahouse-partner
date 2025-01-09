@@ -81,9 +81,9 @@ export function AppSidebar() {
                 <SidebarMenuButton
                   asChild
                   className={cn(
-                    " rounded-lg p-5 hover:bg-muted",
+                    " rounded-md p-5 hover:bg-muted",
                     location.pathname === item.url
-                      ? "bg-primary/10 hover:bg-primary/20"
+                      ? "bg-primary/5 hover:bg-primary/10"
                       : ""
                   )}
                   onClick={() => router.navigate({ to: item.url })}
