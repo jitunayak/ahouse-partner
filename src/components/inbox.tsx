@@ -25,7 +25,10 @@ export const Inbox = () => {
               <Alert className="flex justify-between">
                 <div className="flex">
                   <img
-                    src={auction.images[0]}
+                    src={
+                      "https://sodtxxxugnxkimshcwap.supabase.co/storage/v1/object/public/" +
+                      auction.images[0]
+                    }
                     alt="image"
                     className="rounded w-36 h-24 aspect-auto mr-2 object-fill"
                   />
@@ -34,7 +37,7 @@ export const Inbox = () => {
                     <AlertTitle>{auction.title}</AlertTitle>
                     <AlertDescription>{auction.description}</AlertDescription>
                     <div className="text-xs text-gray-500 py-2">
-                      Submitted by: John Doe
+                      Submitted by: N/A
                     </div>
                   </div>
                 </div>

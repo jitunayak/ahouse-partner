@@ -1,4 +1,4 @@
-import { useStore } from "@/hooks";
+import { useApi, useStore } from "@/hooks";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,10 @@ import {
 } from "./ui/select";
 
 export default function CreateAsset() {
+  const { auctionsApi } = useApi();
   const [images, setImages] = useState<string[]>([]);
+  const [branchLocation, setBranchLocation] = useState<string>("");
+
   const { user } = useStore(useShallow((state) => ({ user: state.user })));
 
   const onSuccessfulImageUpload = (image: string) => {
@@ -44,8 +47,8 @@ export default function CreateAsset() {
   const form = useForm({
     defaultValues: {
       caseNumber: "",
+      title: "",
       description: "",
-      location: "",
       assetType: "",
     },
   });
@@ -72,9 +75,18 @@ export default function CreateAsset() {
     setImages([]);
   }, []);
 
-  const handleSubmit = async () => {
-    console.log(images);
-  };
+  const {
+    isPending,
+    mutateAsync: handleSubmit,
+    isSuccess,
+  } = auctionsApi.save({
+    title: form.getValues().title,
+    case_number: form.getValues().caseNumber,
+    description: form.getValues().description,
+    branch: branchLocation,
+    assetType: form.getValues().assetType,
+    images: images,
+  });
 
   return (
     <Dialog>
@@ -93,7 +105,7 @@ export default function CreateAsset() {
 
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form onSubmit={() => handleSubmit()}>
+            <form>
               <div className="grid gap-4 bg-background">
                 <FormField
                   control={form.control}
@@ -115,17 +127,36 @@ export default function CreateAsset() {
                 />
                 <FormField
                   control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="title"
+                          type="text"
+                          placeholder="e.g. Gold Bar of 1kg"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
                   name="assetType"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Asset Type</FormLabel>
                       <FormControl>
-                        <Select>
+                        <Select
+                          value={field.value}
+                          onValueChange={field.onChange}
+                        >
                           <SelectTrigger className="w-full">
-                            <SelectValue
-                              placeholder="Select asset type"
-                              {...field}
-                            />
+                            <SelectValue placeholder="Select asset type" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
@@ -163,7 +194,10 @@ export default function CreateAsset() {
                 />
 
                 <FormLabel>Location</FormLabel>
-                <BranchSelection />
+                <BranchSelection
+                  value={branchLocation}
+                  onChange={setBranchLocation}
+                />
                 <FormMessage />
               </div>
             </form>
@@ -188,7 +222,12 @@ export default function CreateAsset() {
           </Form>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={() => handleSubmit()}>
+          <Button
+            type="submit"
+            onClick={() => handleSubmit()}
+            isLoading={isPending}
+            disabled={isPending || isSuccess}
+          >
             Save changes
           </Button>
         </DialogFooter>

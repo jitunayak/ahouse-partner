@@ -50,6 +50,35 @@ export const useApi = () => {
   };
 
   const auctionsApi = {
+    save: (props: {
+      title: string;
+      case_number: string;
+      description: string;
+      assetType: string;
+      branch: string;
+      images: string[];
+    }) => {
+      return useMutation({
+        mutationFn: async () => {
+          await supabase.from("auctions").insert({
+            title: props.title,
+            case_number: props.case_number,
+            description: props.description,
+            branch: props.branch,
+            org_id: user?.org_id,
+            status: "submitted",
+            category: props.assetType,
+            images: props.images,
+            created_by: user?.id,
+          });
+        },
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+          });
+        },
+      });
+    },
     list: () => {
       const getUnApprovedAuctions = async () => {
         const { data, error } = await supabase

@@ -95,11 +95,16 @@ const bankBranches = [
   },
 ];
 
-export default function BranchSelection() {
+type BranchSelectionProps = {
+  value: string;
+  onChange: (value: string) => void;
+};
+export default function BranchSelection({
+  onChange,
+  value,
+}: BranchSelectionProps) {
   const id = useId();
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
-
   return (
     <div className="space-y-2">
       <Popover open={open} onOpenChange={setOpen} modal={true}>
@@ -144,7 +149,7 @@ export default function BranchSelection() {
                     key={framework.value}
                     value={framework.value}
                     onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : currentValue);
+                      onChange(currentValue);
                       setOpen(false);
                     }}
                   >
