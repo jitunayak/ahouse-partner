@@ -95,7 +95,7 @@ export default function CreateAsset() {
           Add Asset <PlusIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="w-full">
         <DialogHeader>
           <DialogTitle>New Asset</DialogTitle>
           <DialogDescription>
@@ -106,25 +106,58 @@ export default function CreateAsset() {
         <div className="grid gap-4 py-4">
           <Form {...form}>
             <form>
-              <div className="grid gap-4 bg-background">
-                <FormField
-                  control={form.control}
-                  name="caseNumber"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Case Number</FormLabel>
-                      <FormControl>
-                        <Input
-                          id="caseNumber"
-                          type="number"
-                          placeholder="e.g. 123456"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              <div className="grid gap-6 bg-background">
+                <div className="grid gap-x-4 grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="caseNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Case Number</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="caseNumber"
+                            type="number"
+                            placeholder="e.g. 123456"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="assetType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Asset Type</FormLabel>
+                        <FormControl>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <SelectTrigger className="w-full">
+                              <SelectValue placeholder="Select asset type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup>
+                                <SelectItem value="gold">Gold</SelectItem>
+                                <SelectItem value="land">Land</SelectItem>
+                                <SelectItem value="real-estate">
+                                  Real Estate
+                                </SelectItem>
+                                <SelectItem value="vehicle">Vehicle</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 <FormField
                   control={form.control}
                   name="title"
@@ -144,36 +177,6 @@ export default function CreateAsset() {
                   )}
                 />
 
-                <FormField
-                  control={form.control}
-                  name="assetType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Asset Type</FormLabel>
-                      <FormControl>
-                        <Select
-                          value={field.value}
-                          onValueChange={field.onChange}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select asset type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="gold">Gold</SelectItem>
-                              <SelectItem value="land">Land</SelectItem>
-                              <SelectItem value="real-estate">
-                                Real Estate
-                              </SelectItem>
-                              <SelectItem value="vehicle">Vehicle</SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
                 <FormField
                   control={form.control}
                   name="description"
@@ -201,7 +204,8 @@ export default function CreateAsset() {
                 <FormMessage />
               </div>
             </form>
-            <div className="grid grid-cols-2 gap-2">
+
+            <div className="grid grid-cols-2 gap-2 bg-neutral-50 border-[.5px] p-4 rounded-md">
               <UploadAssetImage
                 url={buildUploadPath(1)}
                 onUploaded={onSuccessfulImageUpload}
