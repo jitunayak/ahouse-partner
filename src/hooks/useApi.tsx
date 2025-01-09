@@ -4,6 +4,7 @@ import { supabase } from "@/supabaseClient";
 import { QueryKeys } from "@/types/enum";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { toast } from "sonner";
 import { useShallow } from "zustand/react/shallow";
 import { useStore } from "./useStore";
 
@@ -76,6 +77,10 @@ export const useApi = () => {
           queryClient.invalidateQueries({
             queryKey: [QueryKeys.AUCTIONS, user?.org_id],
           });
+          toast.info("Asset saved successfully", {
+            description:
+              "It will be live once bidding information is submitted and approved",
+          });
         },
       });
     },
@@ -136,6 +141,7 @@ export const useApi = () => {
         const { data, error } = await supabase
           .from("auctions")
           .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id)
           .eq("status", "submitted");
         if (error) {
           throw new Error(error.message);
@@ -152,6 +158,7 @@ export const useApi = () => {
         const { data, error } = await supabase
           .from("auctions")
           .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id)
           .eq("category", "vehicle");
         if (error) {
           throw new Error(error.message);
@@ -168,6 +175,7 @@ export const useApi = () => {
         const { data, error } = await supabase
           .from("auctions")
           .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id)
           .eq("category", "land");
         if (error) {
           throw new Error(error.message);
@@ -185,6 +193,7 @@ export const useApi = () => {
         const { data, error } = await supabase
           .from("auctions")
           .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id)
           .eq("category", "real-estate");
         if (error) {
           throw new Error(error.message);
@@ -201,6 +210,7 @@ export const useApi = () => {
         const { data, error } = await supabase
           .from("auctions")
           .select("*", { count: "exact" })
+          .eq("org_id", user?.org_id)
           .eq("category", "gold");
         if (error) {
           throw new Error(error.message);
