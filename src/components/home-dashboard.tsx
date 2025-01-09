@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-[180px] hover:shadow-sm space-y-4 rounded-md border-neutral-200 p-4 border bg-background">
+    <div className="w-[180px] hover:shadow-sm space-y-4 rounded-md border-neutral-200 dark:border-neutral-700 p-4 border bg-background">
       {children}
     </div>
   );

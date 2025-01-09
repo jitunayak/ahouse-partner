@@ -205,7 +205,7 @@ export default function CreateAsset() {
               </div>
             </form>
 
-            <div className="grid grid-cols-2 gap-2 bg-neutral-50 border-[.5px] p-4 rounded-md">
+            <div className="grid grid-cols-2 gap-2 bg-neutral-50 dark:bg-neutral-800 border-[.5px] p-4 rounded-md">
               <UploadAssetImage
                 url={buildUploadPath(1)}
                 onUploaded={onSuccessfulImageUpload}
