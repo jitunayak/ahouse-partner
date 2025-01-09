@@ -1,5 +1,5 @@
 import { useApi } from "@/hooks";
-import { CheckCheckIcon, Terminal, Trash2Icon } from "lucide-react";
+import { CheckCheckIcon, CornerLeftDownIcon, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 
@@ -43,15 +43,15 @@ export const Inbox = () => {
                 </div>
                 <div className="flex gap-2 self-end">
                   <Button variant={"outline"} size={"sm"}>
-                    View
+                    Update
                   </Button>
                   <Button variant="destructive" size={"sm"}>
-                    <Trash2Icon className="h-4 w-4" />
-                    Delete
+                    <CornerLeftDownIcon className="h-4 w-4" />
+                    Reject
                   </Button>
                   <Button variant="default" size={"sm"}>
                     <CheckCheckIcon className="h-4 w-4" />
-                    Publish
+                    Ready for approval
                   </Button>
                 </div>
               </Alert>

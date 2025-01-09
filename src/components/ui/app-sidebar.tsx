@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { Home, Inbox, Mail, User2 } from "lucide-react";
+import { Home, Mail, PauseIcon, User2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
@@ -33,9 +33,9 @@ const items = [
     icon: User2,
   },
   {
-    title: "Inbox",
+    title: "Pending Assets",
     url: "/home/inbox",
-    icon: Inbox,
+    icon: PauseIcon,
   },
 ];
 export function AppSidebar() {
