@@ -1,16 +1,39 @@
 import { Button } from "@/components/ui/button";
 import { useImageUpload } from "@/hooks/use-image-upload";
+import { supabase } from "@/supabaseClient";
 import { ImageIcon } from "lucide-react";
 
-export default function UploadAssetImage() {
+type UploadAssetImageProps = {
+  url: string;
+  onUploaded: (imageUrl: string) => void;
+};
+export default function UploadAssetImage({
+  url,
+  onUploaded,
+}: UploadAssetImageProps) {
   const {
     previewUrl,
     fileInputRef,
     handleThumbnailClick: handleButtonClick,
     handleFileChange,
-    handleRemove,
+    // handleRemove,
     fileName,
-  } = useImageUpload();
+  } = useImageUpload({
+    onUpload: async () => {
+      const { data, error } = await supabase.storage
+        .from("auctions")
+        .upload(url, fileInputRef.current!.files![0], {
+          cacheControl: "3600",
+          upsert: false,
+        });
+      if (error) {
+        console.error(error);
+      } else {
+        // console.log(data);
+        onUploaded(data.fullPath);
+      }
+    },
+  });
 
   return (
     <div>
@@ -26,8 +49,8 @@ export default function UploadAssetImage() {
               className="h-full w-full object-cover"
               src={previewUrl}
               alt="Preview of uploaded image"
-              width={32}
-              height={32}
+              width={38}
+              height={38}
             />
           ) : (
             <div aria-hidden="true">
@@ -58,14 +81,14 @@ export default function UploadAssetImage() {
           <div className="inline-flex gap-2 text-xs">
             <p className="truncate text-muted-foreground" aria-live="polite">
               {fileName.substring(0, 10)}
-            </p>{" "}
-            <button
+            </p>
+            {/* <button
               onClick={handleRemove}
               className="font-medium text-red-500 hover:underline"
               aria-label={`Remove ${fileName}`}
             >
               Remove
-            </button>
+            </button> */}
           </div>
         </div>
       )}

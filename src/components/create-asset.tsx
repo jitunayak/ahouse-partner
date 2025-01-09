@@ -1,5 +1,8 @@
+import { useStore } from "@/hooks";
 import { PlusIcon } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useShallow } from "zustand/react/shallow";
 import BranchSelection from "./branch-selection";
 import UploadAssetImage from "./image-upload";
 import { Button } from "./ui/button";
@@ -31,6 +34,13 @@ import {
 } from "./ui/select";
 
 export default function CreateAsset() {
+  const [images, setImages] = useState<string[]>([]);
+  const { user } = useStore(useShallow((state) => ({ user: state.user })));
+
+  const onSuccessfulImageUpload = (image: string) => {
+    setImages((images) => [...images, image]);
+  };
+
   const form = useForm({
     defaultValues: {
       caseNumber: "",
@@ -40,16 +50,30 @@ export default function CreateAsset() {
     },
   });
 
+  const buildUploadPath = useCallback(
+    (sequence: number) => {
+      return (
+        user?.org_id +
+        "/" +
+        new Date().getFullYear() +
+        "/" +
+        new Date().getMonth() +
+        1 +
+        "/" +
+        new Date().getDate() +
+        "/" +
+        `${sequence}-auction-${new Date().toISOString()}.jpg`
+      );
+    },
+    [user]
+  );
+
+  useEffect(() => {
+    setImages([]);
+  }, []);
+
   const handleSubmit = async () => {
-    const response = await fetch("/api/asset", {
-      method: "POST",
-      body: JSON.stringify(form.getValues()),
-    });
-    if (response.ok) {
-      alert("Asset created successfully");
-    } else {
-      alert("Error creating asset");
-    }
+    console.log(images);
   };
 
   return (
@@ -144,15 +168,29 @@ export default function CreateAsset() {
               </div>
             </form>
             <div className="grid grid-cols-2 gap-2">
-              <UploadAssetImage />
-              <UploadAssetImage />
-              <UploadAssetImage />
-              <UploadAssetImage />
+              <UploadAssetImage
+                url={buildUploadPath(1)}
+                onUploaded={onSuccessfulImageUpload}
+              />
+              <UploadAssetImage
+                url={buildUploadPath(2)}
+                onUploaded={onSuccessfulImageUpload}
+              />
+              <UploadAssetImage
+                url={buildUploadPath(3)}
+                onUploaded={onSuccessfulImageUpload}
+              />
+              <UploadAssetImage
+                url={buildUploadPath(4)}
+                onUploaded={onSuccessfulImageUpload}
+              />
             </div>
           </Form>
         </div>
         <DialogFooter>
-          <Button type="submit">Save changes</Button>
+          <Button type="submit" onClick={() => handleSubmit()}>
+            Save changes
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
