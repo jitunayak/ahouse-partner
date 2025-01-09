@@ -21,6 +21,14 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
 
 export default function CreateAsset() {
   const form = useForm({
@@ -76,6 +84,36 @@ export default function CreateAsset() {
                           placeholder="e.g. 123456"
                           {...field}
                         />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="assetType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Asset Type</FormLabel>
+                      <FormControl>
+                        <Select>
+                          <SelectTrigger className="w-full">
+                            <SelectValue
+                              placeholder="Select asset type"
+                              {...field}
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="gold">Gold</SelectItem>
+                              <SelectItem value="land">Land</SelectItem>
+                              <SelectItem value="real-estate">
+                                Real Estate
+                              </SelectItem>
+                              <SelectItem value="vehicle">Vehicle</SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
