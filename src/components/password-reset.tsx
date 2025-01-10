@@ -31,10 +31,7 @@ function PasswordReset() {
     console.log(data);
     setIsLoading(true);
     const { error, data: result } = await supabase.auth.resetPasswordForEmail(
-      data.email,
-      {
-        redirectTo: `${import.meta.env.VITE_WEB_APP_URL}/update-password`,
-      }
+      data.email
     );
 
     if (error) {
