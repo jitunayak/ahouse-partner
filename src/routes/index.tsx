@@ -1,5 +1,5 @@
 import { supabase } from "@/supabaseClient";
-import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import * as React from "react";
 
 export const Route = createFileRoute("/")({
@@ -7,7 +7,7 @@ export const Route = createFileRoute("/")({
 });
 
 function RouteComponent() {
-  const router = useRouter();
+  // const router = useRouter();
   React.useEffect(() => {
     // supabase.auth.getSession().then(({ data: { session } }) => {
     //   if (session) {
