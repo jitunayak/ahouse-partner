@@ -35,7 +35,13 @@ type IProps = {
   auctionDate: Date;
 };
 
-function UpdateAuction({ title, id }: IProps) {
+function UpdateAuction({
+  title,
+  id,
+  assetValue,
+  auctionDate,
+  emdAmount,
+}: IProps) {
   const updateAuctionSchema = z.object({
     auctionDate: z
       .date({ message: "Auction date must be specified" })
@@ -50,6 +56,11 @@ function UpdateAuction({ title, id }: IProps) {
 
   const form = useForm<z.infer<typeof updateAuctionSchema>>({
     resolver: zodResolver(updateAuctionSchema),
+    defaultValues: {
+      auctionDate: auctionDate,
+      emdAmount: emdAmount,
+      assetValue: assetValue,
+    },
   });
 
   const { auctionsApi } = useApi();
@@ -68,7 +79,7 @@ function UpdateAuction({ title, id }: IProps) {
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={"outline"} className="text-primary">
+          <Button variant={"ghost"} className="">
             Update
           </Button>
         </DialogTrigger>

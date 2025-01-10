@@ -1,6 +1,6 @@
 import { useApi } from "@/hooks";
 import { format } from "date-fns";
-import { CheckCheckIcon, CornerLeftDownIcon } from "lucide-react";
+import { CheckCheckIcon, CircleOff } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import UpdateAuction from "./update-auction";
@@ -61,6 +61,14 @@ export const Inbox = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 self-end">
+                  <Button
+                    variant="ghost"
+                    size={"sm"}
+                    className=" text-orange-600 hover:bg-orange-50"
+                  >
+                    <CircleOff className="h-4 w-4" />
+                    Reject
+                  </Button>
                   <UpdateAuction
                     id={auction.id}
                     title={auction.title}
@@ -68,11 +76,19 @@ export const Inbox = () => {
                     assetValue={auction.asset_value}
                     auctionDate={auction.start_time}
                   />
-                  <Button variant="destructive" size={"sm"}>
-                    <CornerLeftDownIcon className="h-4 w-4" />
-                    Reject
-                  </Button>
-                  <Button variant="default" size={"sm"}>
+
+                  <Button
+                    variant="outline"
+                    size={"sm"}
+                    className="text-primary"
+                    disabled={
+                      !(
+                        auction.asset_value &&
+                        auction.emd_amount &&
+                        auction.start_time
+                      )
+                    }
+                  >
                     <CheckCheckIcon className="h-4 w-4" />
                     Ready for approval
                   </Button>
