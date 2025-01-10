@@ -10,7 +10,7 @@ function RouteComponent() {
   const router = useRouter();
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event);
+      console.log("root-" + event);
       if (event === "SIGNED_OUT") {
         // handle sign out event
         router.navigate({ to: "/login", replace: true });
@@ -30,7 +30,12 @@ function RouteComponent() {
       }
       if (event === "SIGNED_IN") {
         // handle sign in event
-        router.navigate({ to: "/home", replace: true });
+        if (router.matchRoute("/update-password")) {
+          // if user is already on the update-password route, don't navigate again
+          return;
+        } else {
+          router.navigate({ to: "/home", replace: true });
+        }
       } 
     });
 

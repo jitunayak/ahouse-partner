@@ -17,7 +17,7 @@ function RootComponent() {
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event);
+      console.log("home-" + event);
      if (event === "SIGNED_OUT") {
        // handle sign out event
        router.navigate({ to: "/login", replace: true });
