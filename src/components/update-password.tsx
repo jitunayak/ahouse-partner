@@ -89,7 +89,11 @@ function UpdatePassword() {
                 </FormItem>
               )}
             />
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading || !form.formState.isValid}
+            >
               Submit
             </Button>
           </div>

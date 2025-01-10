@@ -1,7 +1,9 @@
 import { useApi, useStore } from "@/hooks";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { useShallow } from "zustand/react/shallow";
 import BranchSelection from "./branch-selection";
 import UploadAssetImage from "./image-upload";
@@ -33,6 +35,13 @@ import {
   SelectValue,
 } from "./ui/select";
 
+const formSchema = z.object({
+  caseNumber: z.number().min(1, { message: "required" }),
+  title: z.string({ message: "required" }),
+  description: z.string({ message: "required" }),
+  assetType: z.string(),
+});
+
 export default function CreateAsset() {
   const { auctionsApi } = useApi();
   const [images, setImages] = useState<string[]>([]);
@@ -44,13 +53,8 @@ export default function CreateAsset() {
     setImages((images) => [...images, image]);
   };
 
-  const form = useForm({
-    defaultValues: {
-      caseNumber: "",
-      title: "",
-      description: "",
-      assetType: "",
-    },
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
   });
 
   const buildUploadPath = useCallback(
@@ -75,18 +79,19 @@ export default function CreateAsset() {
     setImages([]);
   }, []);
 
-  const {
-    isPending,
-    mutateAsync: handleSubmit,
-    isSuccess,
-  } = auctionsApi.save({
+  const { isPending, mutateAsync, isSuccess } = auctionsApi.save({
     title: form.getValues().title,
-    case_number: form.getValues().caseNumber,
+    case_number: String(form.getValues().caseNumber),
     description: form.getValues().description,
     branch: branchLocation,
     assetType: form.getValues().assetType,
     images: images,
   });
+
+  const handleSubmit = async () => {
+    console.log(form.getValues());
+    await mutateAsync();
+  };
 
   return (
     <Dialog>
@@ -105,7 +110,7 @@ export default function CreateAsset() {
 
         <div className="grid gap-4 py-4">
           <Form {...form}>
-            <form>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
               <div className="grid gap-6 bg-background">
                 <div className="grid gap-x-4 grid-cols-2">
                   <FormField
@@ -120,6 +125,10 @@ export default function CreateAsset() {
                             type="number"
                             placeholder="e.g. 123456"
                             {...field}
+                            value={field.value}
+                            onChange={() => {
+                              form.setValue("caseNumber", Number(field.value));
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -204,37 +213,43 @@ export default function CreateAsset() {
                 <FormMessage />
               </div>
             </form>
-
-            <div className="grid grid-cols-2 gap-2 bg-neutral-50 dark:bg-neutral-800 border-[.5px] p-4 rounded-md">
-              <UploadAssetImage
-                url={buildUploadPath(1)}
-                onUploaded={onSuccessfulImageUpload}
-              />
-              <UploadAssetImage
-                url={buildUploadPath(2)}
-                onUploaded={onSuccessfulImageUpload}
-              />
-              <UploadAssetImage
-                url={buildUploadPath(3)}
-                onUploaded={onSuccessfulImageUpload}
-              />
-              <UploadAssetImage
-                url={buildUploadPath(4)}
-                onUploaded={onSuccessfulImageUpload}
-              />
-            </div>
           </Form>
+          <div className="grid grid-cols-2 gap-2 bg-neutral-50 dark:bg-neutral-800 border-[.5px] p-4 rounded-md">
+            <UploadAssetImage
+              url={buildUploadPath(1)}
+              onUploaded={onSuccessfulImageUpload}
+            />
+            <UploadAssetImage
+              url={buildUploadPath(2)}
+              onUploaded={onSuccessfulImageUpload}
+            />
+            <UploadAssetImage
+              url={buildUploadPath(3)}
+              onUploaded={onSuccessfulImageUpload}
+            />
+            <UploadAssetImage
+              url={buildUploadPath(4)}
+              onUploaded={onSuccessfulImageUpload}
+            />
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => form.reset()}
+            >
+              Reset
+            </Button>
+            <Button
+              type="submit"
+              isLoading={isPending}
+              disabled={isPending || isSuccess}
+              onClick={form.handleSubmit(handleSubmit)}
+            >
+              Save changes
+            </Button>
+          </DialogFooter>{" "}
         </div>
-        <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() => handleSubmit()}
-            isLoading={isPending}
-            disabled={isPending || isSuccess}
-          >
-            Save changes
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,7 @@
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
+import { MailIcon, MoveLeft } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -48,7 +49,12 @@ function PasswordReset() {
   };
 
   return (
-    <div className="m-10 min-w-96">
+    <div className="mt-10 min-w-96">
+      <Link to="/login">
+        <Button variant={"link"}>
+          <MoveLeft />
+        </Button>
+      </Link>
       <div className="text-xl font-bold">Reset your password</div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -60,13 +66,27 @@ function PasswordReset() {
                 <FormItem>
                   <FormLabel>Email address</FormLabel>
                   <FormControl>
-                    <Input placeholder="email" type="email" {...field} />
+                    <div className="relative">
+                      <Input
+                        placeholder="email"
+                        className="peer pe-12 ps-10"
+                        type="email"
+                        {...field}
+                      />
+                      <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-md text-muted-foreground peer-disabled:opacity-50">
+                        <MailIcon className="h-4 w-4" />
+                      </span>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+            <Button
+              type="submit"
+              isLoading={isLoading}
+              disabled={isLoading || !form.formState.isValid}
+            >
               Send me recovery link
             </Button>
           </div>

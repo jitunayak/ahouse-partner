@@ -45,6 +45,10 @@ function UpdateAuction({ title }: IProps) {
 
   const form = useForm<z.infer<typeof updateAuctionSchema>>({
     resolver: zodResolver(updateAuctionSchema),
+    defaultValues: {
+      emdAmount: 0,
+      assetValue: 0,
+    },
   });
 
   const handleSubmit = () => {};
@@ -81,7 +85,13 @@ function UpdateAuction({ title }: IProps) {
                               className="peer pe-12 ps-6"
                               placeholder="0.00"
                               type="number"
-                              {...field}
+                              value={field.value}
+                              onChange={(e) => {
+                                form.setValue(
+                                  field.name,
+                                  Number(e.target.value)
+                                );
+                              }}
                             />
                             <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-md text-muted-foreground peer-disabled:opacity-50">
                               ₹
@@ -156,7 +166,13 @@ function UpdateAuction({ title }: IProps) {
                               className="peer pe-12 ps-6"
                               placeholder="0.00"
                               type="number"
-                              {...field}
+                              value={field.value}
+                              onChange={(e) => {
+                                form.setValue(
+                                  field.name,
+                                  Number(e.target.value)
+                                );
+                              }}
                             />
                             <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-md text-muted-foreground peer-disabled:opacity-50">
                               ₹
@@ -175,11 +191,20 @@ function UpdateAuction({ title }: IProps) {
                   )}
                 />
               </div>
+              <DialogFooter>
+                <Button
+                  type="reset"
+                  variant={"outline"}
+                  onClick={() => {
+                    form.reset();
+                  }}
+                >
+                  Reset
+                </Button>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
             </form>
           </Form>
-          <DialogFooter>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
