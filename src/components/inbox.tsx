@@ -2,6 +2,7 @@ import { useApi } from "@/hooks";
 import { CheckCheckIcon, CornerLeftDownIcon, Terminal } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
+import UpdateAuction from "./update-auction";
 
 export const Inbox = () => {
   const { auctionsApi } = useApi();
@@ -42,9 +43,7 @@ export const Inbox = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 self-end">
-                  <Button variant={"outline"} size={"sm"}>
-                    Update
-                  </Button>
+                  <UpdateAuction />
                   <Button variant="destructive" size={"sm"}>
                     <CornerLeftDownIcon className="h-4 w-4" />
                     Reject
