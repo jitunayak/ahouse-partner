@@ -1,6 +1,6 @@
 import { supabase } from "@/supabaseClient";
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import * as React from "react";
+import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   component: RouteComponent,
@@ -8,9 +8,9 @@ export const Route = createFileRoute("/")({
 
 function RouteComponent() {
   const router = useRouter();
-  React.useEffect(() => {
+  useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
+      console.log(event);
       if (event === "SIGNED_IN") {
         router.navigate({ to: "/home", replace: true });
         // handle sign in event
