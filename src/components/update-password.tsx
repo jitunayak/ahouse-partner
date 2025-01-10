@@ -28,7 +28,14 @@ function UpdatePassword() {
   });
 
   const onSubmit = async (data: z.infer<typeof updatePasswordSchema>) => {
+    const email = (await supabase.auth.getUser()).data?.user?.email;
+    console.log(email);
+    if (!email) {
+      toast.error("User not found");
+      return;
+    }
     const { error, data: result } = await supabase.auth.updateUser({
+      email: email,
       password: data.password,
     });
 
