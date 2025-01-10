@@ -11,10 +11,7 @@ function RouteComponent() {
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
       console.log(event);
-      if (event === "SIGNED_IN") {
-        router.navigate({ to: "/home", replace: true });
-        // handle sign in event
-      } else if (event === "SIGNED_OUT") {
+      if (event === "SIGNED_OUT") {
         // handle sign out event
         router.navigate({ to: "/login", replace: true });
       } else if (event === "PASSWORD_RECOVERY") {
@@ -31,6 +28,10 @@ function RouteComponent() {
           router.navigate({ to: "/login", replace: true });
         }
       }
+      if (event === "SIGNED_IN") {
+        // handle sign in event
+        router.navigate({ to: "/home", replace: true });
+      } 
     });
 
     return () => {
