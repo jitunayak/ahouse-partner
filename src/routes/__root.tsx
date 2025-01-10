@@ -37,6 +37,8 @@ function RootComponent() {
         // handle initial session
         if (!session) {
           router.navigate({ to: "/login", replace: true });
+        } else {
+          setSession(session);
         }
       }
       if (event === "SIGNED_IN") {
