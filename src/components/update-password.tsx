@@ -1,5 +1,6 @@
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -21,6 +22,7 @@ const updatePasswordSchema = z.object({
     .min(6, { message: "Confirm Password is required" }),
 });
 function UpdatePassword() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof updatePasswordSchema>>({
     resolver: zodResolver(updatePasswordSchema),
   });
@@ -36,6 +38,7 @@ function UpdatePassword() {
     }
     console.log(result);
     toast.success("Password updated successfully");
+    router.navigate({ to: "/login", replace: true });
   };
 
   return (
