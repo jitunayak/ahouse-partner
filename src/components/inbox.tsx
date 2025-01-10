@@ -1,5 +1,6 @@
 import { useApi } from "@/hooks";
-import { CheckCheckIcon, CornerLeftDownIcon, Terminal } from "lucide-react";
+import { format } from "date-fns";
+import { CheckCheckIcon, CornerLeftDownIcon } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import UpdateAuction from "./update-auction";
@@ -31,19 +32,42 @@ export const Inbox = () => {
                       auction.images[0]
                     }
                     alt="image"
-                    className="rounded w-36 h-24 aspect-auto mr-2 object-fill"
+                    className="rounded w-36 h-24 aspect-auto mr-4 object-fill"
                   />
                   <div>
-                    <Terminal className="h-4 w-4 my-2" />
                     <AlertTitle>{auction.title}</AlertTitle>
                     <AlertDescription>{auction.description}</AlertDescription>
-                    <div className="text-xs text-gray-500 py-2">
-                      Submitted by: N/A
+                    <div className="flex flex-col gap-2 mt-2">
+                      <div className="text-xs text-gray-500 ">
+                        Submitted by: N/A
+                      </div>
+
+                      <div className="text-xs text-gray-500 ">
+                        Auction Date:{" "}
+                        {auction.start_time
+                          ? format(auction.start_time, "PPP")
+                          : "N/A"}
+                      </div>
+
+                      <div className="text-xs text-gray-500 ">
+                        EMD Amount:{" "}
+                        {auction.emd_amount ? auction.emd_amount : "N/A"}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        Asset Value:{" "}
+                        {auction.asset_value ? auction.asset_value : "N/A"}
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-2 self-end">
-                  <UpdateAuction id={auction.id} title={auction.title} />
+                  <UpdateAuction
+                    id={auction.id}
+                    title={auction.title}
+                    emdAmount={auction.emd_amount}
+                    assetValue={auction.asset_value}
+                    auctionDate={auction.start_time}
+                  />
                   <Button variant="destructive" size={"sm"}>
                     <CornerLeftDownIcon className="h-4 w-4" />
                     Reject

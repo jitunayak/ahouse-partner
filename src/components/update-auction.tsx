@@ -30,6 +30,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 type IProps = {
   id: number;
   title: string;
+  emdAmount: number;
+  assetValue: number;
+  auctionDate: Date;
 };
 
 function UpdateAuction({ title, id }: IProps) {

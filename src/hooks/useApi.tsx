@@ -105,7 +105,6 @@ export const useApi = () => {
               asset_value: props.assetValue,
               start_time: props.auctionDate,
               end_time: props.auctionDate,
-              status: "submitted",
             })
             .eq("id", props.id);
         },
@@ -144,7 +143,9 @@ export const useApi = () => {
       const getUnApprovedAuctions = async () => {
         const { data, error } = await supabase
           .from("auctions")
-          .select("id, title, description, status, images, case_number")
+          .select(
+            "id, title, description, status, images, case_number, emd_amount, asset_value, start_time, end_time"
+          )
           .eq("org_id", user?.org_id)
           .eq("status", "created");
 
