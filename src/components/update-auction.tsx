@@ -48,6 +48,7 @@ function UpdateAuction({ title }: IProps) {
   });
 
   const handleSubmit = () => {};
+
   return (
     <div>
       <Dialog>

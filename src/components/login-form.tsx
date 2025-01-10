@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useStore } from "@/hooks";
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "@tanstack/react-router";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -171,9 +171,9 @@ export function LoginForm() {
             </div>
             <div className="mt-4 text-center text-sm">
               Forgot account password?{" "}
-              <a href="#" className="text-primary">
+              <Link to="/reset-password" className="text-primary">
                 Reset
-              </a>
+              </Link>
             </div>
           </CardContent>
         </Card>

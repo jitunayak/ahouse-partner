@@ -17,14 +17,14 @@ function RootComponent() {
   const { signOut } = useStore(useShallow((s) => ({ signOut: s.signout })));
 
   React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        return;
-      } else {
-        signOut();
-        router.navigate({ to: "/login", replace: true });
-      }
-    });
+    // supabase.auth.getSession().then(({ data: { session } }) => {
+    //   if (session) {
+    //     return;
+    //   } else {
+    //     signOut();
+    //     router.navigate({ to: "/login", replace: true });
+    //   }
+    // });
   }, [supabase.auth.onAuthStateChange]);
 
   return (

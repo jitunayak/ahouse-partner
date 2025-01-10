@@ -13,6 +13,8 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UpdatePasswordImport } from './routes/update-password'
+import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as LoginImport } from './routes/login'
 import { Route as R403Import } from './routes/403'
 import { Route as IndexImport } from './routes/index'
@@ -30,6 +32,18 @@ const HomeImport = createFileRoute('/home')()
 const HomeRoute = HomeImport.update({
   id: '/home',
   path: '/home',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const UpdatePasswordRoute = UpdatePasswordImport.update({
+  id: '/update-password',
+  path: '/update-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResetPasswordRoute = ResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -97,6 +111,20 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/update-password': {
+      id: '/update-password'
+      path: '/update-password'
+      fullPath: '/update-password'
+      preLoaderRoute: typeof UpdatePasswordImport
       parentRoute: typeof rootRoute
     }
     '/home': {
@@ -169,6 +197,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/home': typeof HomeHomeRouteWithChildren
   '/home/inbox': typeof HomeHomeInboxRoute
   '/home/management': typeof HomeHomeManagementRoute
@@ -179,6 +209,8 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/home': typeof HomeHomeIndexRoute
   '/home/inbox': typeof HomeHomeInboxRoute
   '/home/management': typeof HomeHomeManagementRoute
@@ -189,6 +221,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/403': typeof R403Route
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
   '/home/_home/inbox': typeof HomeHomeInboxRoute
@@ -202,17 +236,29 @@ export interface FileRouteTypes {
     | '/'
     | '/403'
     | '/login'
+    | '/reset-password'
+    | '/update-password'
     | '/home'
     | '/home/inbox'
     | '/home/management'
     | '/home/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/403' | '/login' | '/home' | '/home/inbox' | '/home/management'
+  to:
+    | '/'
+    | '/403'
+    | '/login'
+    | '/reset-password'
+    | '/update-password'
+    | '/home'
+    | '/home/inbox'
+    | '/home/management'
   id:
     | '__root__'
     | '/'
     | '/403'
     | '/login'
+    | '/reset-password'
+    | '/update-password'
     | '/home'
     | '/home/_home'
     | '/home/_home/inbox'
@@ -225,6 +271,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   R403Route: typeof R403Route
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  UpdatePasswordRoute: typeof UpdatePasswordRoute
   HomeRoute: typeof HomeRouteWithChildren
 }
 
@@ -232,6 +280,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   R403Route: R403Route,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  UpdatePasswordRoute: UpdatePasswordRoute,
   HomeRoute: HomeRouteWithChildren,
 }
 
@@ -248,6 +298,8 @@ export const routeTree = rootRoute
         "/",
         "/403",
         "/login",
+        "/reset-password",
+        "/update-password",
         "/home"
       ]
     },
@@ -259,6 +311,12 @@ export const routeTree = rootRoute
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/reset-password": {
+      "filePath": "reset-password.tsx"
+    },
+    "/update-password": {
+      "filePath": "update-password.tsx"
     },
     "/home": {
       "filePath": "home",

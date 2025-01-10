@@ -9,13 +9,13 @@ export const Route = createFileRoute("/")({
 function RouteComponent() {
   const router = useRouter();
   React.useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        router.navigate({ to: "/home", replace: true });
-      } else {
-        router.navigate({ to: "/login", replace: true });
-      }
-    });
+    // supabase.auth.getSession().then(({ data: { session } }) => {
+    //   if (session) {
+    //     router.navigate({ to: "/home", replace: true });
+    //   } else {
+    //     router.navigate({ to: "/login", replace: true });
+    //   }
+    // });
   }, [supabase.auth.onAuthStateChange]);
   return "";
 }
