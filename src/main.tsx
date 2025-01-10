@@ -23,7 +23,7 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="partner-ahouse-ui-theme">
         <NuqsAdapter>
           <RouterProvider router={router} />
         </NuqsAdapter>
