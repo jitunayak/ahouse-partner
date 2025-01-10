@@ -1,6 +1,7 @@
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "@tanstack/react-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -20,12 +21,14 @@ const passwordResetSchema = z.object({
 });
 function PasswordReset() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof passwordResetSchema>>({
     resolver: zodResolver(passwordResetSchema),
   });
 
   const onSubmit = async (data: z.infer<typeof passwordResetSchema>) => {
     console.log(data);
+    setIsLoading(true);
     const { error, data: result } = await supabase.auth.resetPasswordForEmail(
       data.email,
       {
@@ -40,6 +43,7 @@ function PasswordReset() {
     console.log(result);
     toast.success("Recovery email sent successfully");
     form.reset();
+    setIsLoading(false);
     router.navigate({ to: "/login", replace: true });
   };
 
@@ -62,7 +66,9 @@ function PasswordReset() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Send me recovery link</Button>
+            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+              Send me recovery link
+            </Button>
           </div>
         </form>
       </Form>

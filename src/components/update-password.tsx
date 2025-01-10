@@ -1,6 +1,7 @@
 import { supabase } from "@/supabaseClient";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "@tanstack/react-router";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -23,11 +24,14 @@ const updatePasswordSchema = z.object({
 });
 function UpdatePassword() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   const form = useForm<z.infer<typeof updatePasswordSchema>>({
     resolver: zodResolver(updatePasswordSchema),
   });
 
   const onSubmit = async (data: z.infer<typeof updatePasswordSchema>) => {
+    setIsLoading(true);
     const email = (await supabase.auth.getUser()).data?.user?.email;
     console.log(email);
     if (!email) {
@@ -45,6 +49,7 @@ function UpdatePassword() {
     }
     console.log(result);
     toast.success("Password updated successfully");
+    setIsLoading(false);
     router.navigate({ to: "/login", replace: true });
   };
 
@@ -52,7 +57,7 @@ function UpdatePassword() {
     <div className="m-10 min-w-96">
       <div className="text-xl font-bold">Reset your password</div>
       <Form {...form}>
-        <form onSubmit={() => form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col space-y-4 mt-10">
             <FormField
               control={form.control}
@@ -84,7 +89,9 @@ function UpdatePassword() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit" isLoading={isLoading} disabled={isLoading}>
+              Submit
+            </Button>
           </div>
         </form>
       </Form>
