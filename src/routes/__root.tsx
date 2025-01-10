@@ -17,28 +17,33 @@ function RootComponent() {
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("home-" + event);
-     if (event === "SIGNED_OUT") {
-       // handle sign out event
-       router.navigate({ to: "/login", replace: true });
-     } else if (event === "PASSWORD_RECOVERY") {
-       // handle password recovery event
-       router.navigate({ to: "/update-password", replace: true });
-     } else if (event === "TOKEN_REFRESHED") {
-       // handle token refreshed event
-     } else if (event === "USER_UPDATED") {
-       // handle user updated event
-     }
-     if (event === "INITIAL_SESSION") {
-       // handle initial session
-       if (!session) {
-         router.navigate({ to: "/login", replace: true });
-       }
-     }
-     if (event === "SIGNED_IN") {
-       router.navigate({ to: "/home", replace: true });
-       // handle sign in event
-     } 
+      console.log("home-" + { event, session });
+      if (event === "SIGNED_OUT") {
+        // handle sign out event
+        router.navigate({ to: "/login", replace: true });
+      } else if (event === "PASSWORD_RECOVERY") {
+        // handle password recovery event
+        router.navigate({ to: "/update-password", replace: true });
+      } else if (event === "TOKEN_REFRESHED") {
+        // handle token refreshed event
+      } else if (event === "USER_UPDATED") {
+        // handle user updated event
+      }
+      if (event === "INITIAL_SESSION") {
+        // handle initial session
+        if (!session) {
+          router.navigate({ to: "/login", replace: true });
+        }
+      }
+      if (event === "SIGNED_IN") {
+        // handle sign in event
+        if (router.matchRoute("/update-password")) {
+          // if user is already on the update-password route, don't navigate again
+          return;
+        } else {
+          router.navigate({ to: "/home", replace: true });
+        }
+      } 
     });
 
     return () => {
