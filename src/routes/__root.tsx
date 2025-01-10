@@ -15,9 +15,7 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   const router = useRouter();
-  const { setSession } = useStore(
-    useShallow((s) => ({ setSession: s.setSession }))
-  );
+  const { login } = useStore(useShallow((s) => ({ login: s.login })));
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -38,7 +36,7 @@ function RootComponent() {
         if (!session) {
           router.navigate({ to: "/login", replace: true });
         } else {
-          setSession(session);
+          login();
         }
       }
       if (event === "SIGNED_IN") {
@@ -47,7 +45,7 @@ function RootComponent() {
           // if user is already on the update-password route, don't navigate again
           return;
         } else {
-          setSession(session);
+          login();
           router.navigate({ to: "/home", replace: true });
         }
       }
