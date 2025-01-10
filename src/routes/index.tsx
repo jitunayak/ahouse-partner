@@ -10,7 +10,6 @@ function RouteComponent() {
   const router = useRouter();
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log("root-" + event);
       if (event === "SIGNED_OUT") {
         // handle sign out event
         router.navigate({ to: "/login", replace: true });
@@ -36,7 +35,7 @@ function RouteComponent() {
         } else {
           router.navigate({ to: "/home", replace: true });
         }
-      } 
+      }
     });
 
     return () => {
