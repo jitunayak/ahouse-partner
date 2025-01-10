@@ -26,7 +26,11 @@ import {
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
-function UpdateAuction() {
+type IProps = {
+  title: string;
+};
+
+function UpdateAuction({ title }: IProps) {
   const updateAuctionSchema = z.object({
     auctionDate: z
       .date({ message: "Auction date must be specified" })
@@ -54,9 +58,9 @@ function UpdateAuction() {
         </DialogTrigger>
         <DialogContent className="w-full">
           <DialogHeader>
-            <DialogTitle>Update Asset</DialogTitle>
+            <DialogTitle>{title.substring(0, 30)}...</DialogTitle>
             <DialogDescription>
-              Make changes to new asset here. Click save when you're done.
+              Make changes to asset here. Click save when you're done.
             </DialogDescription>
           </DialogHeader>
           <Form {...form}>
