@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner";
+import { useStore } from "@/hooks";
 import { queryClient } from "@/lib";
 import { supabase } from "@/supabaseClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -7,13 +8,16 @@ import { Outlet, createRootRoute, useRouter } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import * as React from "react";
 import { useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 export const Route = createRootRoute({
   component: RootComponent,
 });
 
 function RootComponent() {
   const router = useRouter();
-  // const { signOut } = useStore(useShallow((s) => ({ signOut: s.signout })));
+  const { setSession } = useStore(
+    useShallow((s) => ({ setSession: s.setSession }))
+  );
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
@@ -41,9 +45,10 @@ function RootComponent() {
           // if user is already on the update-password route, don't navigate again
           return;
         } else {
+          setSession(session);
           router.navigate({ to: "/home", replace: true });
         }
-      } 
+      }
     });
 
     return () => {

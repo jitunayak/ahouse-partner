@@ -14,6 +14,7 @@ interface IAuthState {
 interface IAuthAction {
   login: () => Promise<{ error: AuthError; data: null; session: null } | void>;
   signout: () => Promise<void>;
+  setSession: (session: Session | null) => void;
 }
 
 export interface IAuthStore extends IAuthState, IAuthAction {}
@@ -41,6 +42,11 @@ export const createAuthSlice: StateCreator<
     set({
       user: null,
       session: null,
+    });
+  },
+  setSession: (session: Session | null) => {
+    set({
+      session,
     });
   },
 });
