@@ -29,7 +29,7 @@ function PasswordReset() {
     const { error, data: result } = await supabase.auth.resetPasswordForEmail(
       data.email,
       {
-        redirectTo: "http://localhost:3000/update-password",
+        redirectTo: `${import.meta.env.VITE_WEB_APP_URL}/update-password`,
       }
     );
 

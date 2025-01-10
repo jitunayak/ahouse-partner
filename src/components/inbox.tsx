@@ -27,7 +27,7 @@ export const Inbox = () => {
                 <div className="flex">
                   <img
                     src={
-                      "https://sodtxxxugnxkimshcwap.supabase.co/storage/v1/object/public/" +
+                      `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/` +
                       auction.images[0]
                     }
                     alt="image"
