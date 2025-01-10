@@ -43,7 +43,7 @@ export const Inbox = () => {
                   </div>
                 </div>
                 <div className="flex gap-2 self-end">
-                  <UpdateAuction title={auction.title} />
+                  <UpdateAuction id={auction.id} title={auction.title} />
                   <Button variant="destructive" size={"sm"}>
                     <CornerLeftDownIcon className="h-4 w-4" />
                     Reject

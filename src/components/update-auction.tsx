@@ -1,4 +1,5 @@
 import { Calendar } from "@/components/ui/calendar";
+import { useApi } from "@/hooks";
 import { cn, convertNumberToWords } from "@/lib";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
@@ -27,10 +28,11 @@ import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
 type IProps = {
+  id: number;
   title: string;
 };
 
-function UpdateAuction({ title }: IProps) {
+function UpdateAuction({ title, id }: IProps) {
   const updateAuctionSchema = z.object({
     auctionDate: z
       .date({ message: "Auction date must be specified" })
@@ -45,13 +47,19 @@ function UpdateAuction({ title }: IProps) {
 
   const form = useForm<z.infer<typeof updateAuctionSchema>>({
     resolver: zodResolver(updateAuctionSchema),
-    defaultValues: {
-      emdAmount: 0,
-      assetValue: 0,
-    },
   });
 
-  const handleSubmit = () => {};
+  const { auctionsApi } = useApi();
+
+  const { isPending, mutateAsync } = auctionsApi.update({
+    id: id,
+    assetValue: form.getValues("assetValue"),
+    emdAmount: form.getValues("emdAmount"),
+    auctionDate: form.getValues("auctionDate"),
+  });
+  const handleSubmit = async () => {
+    await mutateAsync();
+  };
 
   return (
     <div>
@@ -201,7 +209,13 @@ function UpdateAuction({ title }: IProps) {
                 >
                   Reset
                 </Button>
-                <Button type="submit">Save changes</Button>
+                <Button
+                  type="submit"
+                  isLoading={isPending}
+                  disabled={isPending}
+                >
+                  Save changes
+                </Button>
               </DialogFooter>
             </form>
           </Form>

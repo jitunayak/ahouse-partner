@@ -67,7 +67,7 @@ export const useApi = () => {
             description: props.description,
             branch: props.branch,
             org_id: user?.org_id,
-            status: "submitted",
+            status: "created",
             category: props.assetType,
             images: props.images,
             created_by: user?.id,
@@ -80,6 +80,46 @@ export const useApi = () => {
           toast.info("Asset saved successfully", {
             description:
               "It will be live once bidding information is submitted and approved",
+          });
+        },
+         onError: (err) => {
+          toast.error("Something went wrong", {
+            description: JSON.stringify(err),
+          });
+        },
+      });
+    },
+
+    update: (props: {
+      id: number;
+      emdAmount: number;
+      assetValue: number;
+      auctionDate: Date;
+    }) => {
+      return useMutation({
+        mutationFn: async () => {
+          await supabase
+            .from("auctions")
+            .update({
+              emd_amount: props.emdAmount,
+              asset_value: props.assetValue,
+              start_time: props.auctionDate,
+              end_time: props.auctionDate,
+              status: "submitted",
+            })
+            .eq("id", props.id);
+        },
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.AUCTIONS, user?.org_id, "pending"],
+          });
+          toast.info("Asset updated successfully", {
+            description: "Ready to be approved",
+          });
+        },
+        onError: (err) => {
+          toast.error("Something went wrong", {
+            description: JSON.stringify(err),
           });
         },
       });
@@ -106,7 +146,7 @@ export const useApi = () => {
           .from("auctions")
           .select("id, title, description, status, images, case_number")
           .eq("org_id", user?.org_id)
-          .eq("status", "submitted");
+          .eq("status", "created");
 
         if (error) {
           throw new Error(error.message);
@@ -142,7 +182,7 @@ export const useApi = () => {
           .from("auctions")
           .select("*", { count: "exact" })
           .eq("org_id", user?.org_id)
-          .eq("status", "submitted");
+          .eq("status", "created");
         if (error) {
           throw new Error(error.message);
         }
