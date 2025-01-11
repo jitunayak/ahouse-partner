@@ -79,7 +79,7 @@ function UpdateAuction({
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={"ghost"} className="">
+          <Button variant={"ghost"} className="w-full">
             Update
           </Button>
         </DialogTrigger>

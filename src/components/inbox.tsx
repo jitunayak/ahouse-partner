@@ -16,16 +16,16 @@ export const Inbox = () => {
     return <p>Error: {error}</p>;
   }
   return (
-    <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-screen">
+    <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-full">
       <h1 className="text-2xl font-bold">Pending Assets</h1>
 
       {data.length === 0 && <p>No Unapproved Auctions</p>}
-      <div className="w-full lg:w-[calc(100%-16rem)] space-y-2 ">
+      <div className="w-full space-y-2 ">
         {data.map((auction) => {
           return (
             <div key={auction.id}>
               <Alert className="flex justify-between">
-                <div className="flex">
+                <div className="flex flex-col md:flex-row">
                   <img
                     src={
                       `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/` +
@@ -67,13 +67,13 @@ export const Inbox = () => {
                     </div>
                   </div>
                 </div>
-                <div className="flex gap-2 self-end">
+                <div className="flex gap-2 self-end flex-col lg:flex-row">
                   <Button
                     variant="ghost"
                     size={"sm"}
                     className=" text-orange-600 hover:bg-orange-50"
                   >
-                    <CircleOff className=" scale-90" />
+                    <CircleOff className="scale-90" />
                     Reject
                   </Button>
                   <UpdateAuction
