@@ -16,31 +16,86 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { Home, Mail, PauseIcon, User2 } from "lucide-react";
+import { HomeIcon, Mail, PauseIcon, SendIcon, User2Icon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
 
-const items = [
+const applicationItems = [
   {
     title: "Dashboard",
     url: "/home",
-    icon: Home,
+    icon: HomeIcon,
   },
   {
     title: "User Management",
     url: "/home/management",
-    icon: User2,
+    icon: User2Icon,
   },
+];
+const assetItems = [
   {
     title: "Pending Assets",
     url: "/home/inbox",
     icon: PauseIcon,
   },
+  {
+    title: "Asset Listing",
+    url: "/home/asset-listing",
+    icon: SendIcon,
+  },
 ];
+
+function SidebarMenuItems({
+  items,
+  onClick,
+}: {
+  items: { title: string; url: string; icon: any }[];
+  onClick: (e: string) => void;
+}) {
+  const location = useLocation();
+
+  return (
+    <SidebarMenu>
+      {items.map((item) => (
+        <SidebarMenuItem key={item.title} className="mx-4">
+          <SidebarMenuButton
+            asChild
+            className={cn(
+              " rounded-md p-2 hover:bg-muted",
+              location.pathname === item.url
+                ? "bg-primary/5 hover:bg-primary/10"
+                : ""
+            )}
+            onClick={() => onClick(item.url)}
+          >
+            <Link to={item.url} preload="intent">
+              <item.icon
+                className={cn(
+                  location.pathname === item.url
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              />
+              <span
+                className={cn(
+                  "ml-2 font-medium text-sm",
+                  location.pathname === item.url
+                    ? "text-primary"
+                    : "text-muted-foreground"
+                )}
+              >
+                {item.title}
+              </span>
+            </Link>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  );
+}
 export function AppSidebar() {
   const router = useRouter();
-  const location = useLocation();
   const { signOut, logoUrl, userInfo } = useStore(
     useShallow((s) => ({
       signOut: s.signout,
@@ -75,42 +130,18 @@ export function AppSidebar() {
         <SidebarGroup />
         <SidebarGroupLabel>Application</SidebarGroupLabel>
         <SidebarGroupContent>
-          <SidebarMenu>
-            {items.map((item) => (
-              <SidebarMenuItem key={item.title} className="mx-4">
-                <SidebarMenuButton
-                  asChild
-                  className={cn(
-                    " rounded-md p-5 hover:bg-muted",
-                    location.pathname === item.url
-                      ? "bg-primary/5 hover:bg-primary/10"
-                      : ""
-                  )}
-                  onClick={() => router.navigate({ to: item.url })}
-                >
-                  <Link to={item.url} preload="intent">
-                    <item.icon
-                      className={cn(
-                        location.pathname === item.url
-                          ? "text-primary"
-                          : "text-muted-foreground"
-                      )}
-                    />
-                    <span
-                      className={cn(
-                        "ml-2 font-medium",
-                        location.pathname === item.url
-                          ? "text-primary"
-                          : "text-muted-foreground"
-                      )}
-                    >
-                      {item.title}
-                    </span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
+          <SidebarMenuItems
+            items={applicationItems}
+            onClick={(e: string) => router.navigate({ to: e })}
+          />
+        </SidebarGroupContent>
+
+        <SidebarGroupLabel>Assets</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <SidebarMenuItems
+            items={assetItems}
+            onClick={(e: string) => router.navigate({ to: e })}
+          />
         </SidebarGroupContent>
       </SidebarContent>
       <SidebarFooter>

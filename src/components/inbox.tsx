@@ -97,7 +97,7 @@ export const Inbox = () => {
                     }
                   >
                     <CheckCheckIcon className="h-4 w-4" />
-                    Ready for approval
+                    Ready to Publish
                   </Button>
                 </div>
               </Alert>

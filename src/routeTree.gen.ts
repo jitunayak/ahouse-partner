@@ -26,6 +26,9 @@ const R403LazyImport = createFileRoute('/403')()
 const HomeHomeIndexLazyImport = createFileRoute('/home/_home/')()
 const HomeHomeManagementLazyImport = createFileRoute('/home/_home/management')()
 const HomeHomeInboxLazyImport = createFileRoute('/home/_home/inbox')()
+const HomeHomeAssetListingLazyImport = createFileRoute(
+  '/home/_home/asset-listing',
+)()
 
 // Create/Update Routes
 
@@ -98,6 +101,14 @@ const HomeHomeInboxLazyRoute = HomeHomeInboxLazyImport.update({
   import('./routes/home/_home.inbox.lazy').then((d) => d.Route),
 )
 
+const HomeHomeAssetListingLazyRoute = HomeHomeAssetListingLazyImport.update({
+  id: '/asset-listing',
+  path: '/asset-listing',
+  getParentRoute: () => HomeHomeRoute,
+} as any).lazy(() =>
+  import('./routes/home/_home.asset-listing.lazy').then((d) => d.Route),
+)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -151,6 +162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeHomeImport
       parentRoute: typeof HomeRoute
     }
+    '/home/_home/asset-listing': {
+      id: '/home/_home/asset-listing'
+      path: '/asset-listing'
+      fullPath: '/home/asset-listing'
+      preLoaderRoute: typeof HomeHomeAssetListingLazyImport
+      parentRoute: typeof HomeHomeImport
+    }
     '/home/_home/inbox': {
       id: '/home/_home/inbox'
       path: '/inbox'
@@ -178,12 +196,14 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface HomeHomeRouteChildren {
+  HomeHomeAssetListingLazyRoute: typeof HomeHomeAssetListingLazyRoute
   HomeHomeInboxLazyRoute: typeof HomeHomeInboxLazyRoute
   HomeHomeManagementLazyRoute: typeof HomeHomeManagementLazyRoute
   HomeHomeIndexLazyRoute: typeof HomeHomeIndexLazyRoute
 }
 
 const HomeHomeRouteChildren: HomeHomeRouteChildren = {
+  HomeHomeAssetListingLazyRoute: HomeHomeAssetListingLazyRoute,
   HomeHomeInboxLazyRoute: HomeHomeInboxLazyRoute,
   HomeHomeManagementLazyRoute: HomeHomeManagementLazyRoute,
   HomeHomeIndexLazyRoute: HomeHomeIndexLazyRoute,
@@ -210,6 +230,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordLazyRoute
   '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeHomeRouteWithChildren
+  '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/management': typeof HomeHomeManagementLazyRoute
   '/home/': typeof HomeHomeIndexLazyRoute
@@ -222,6 +243,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordLazyRoute
   '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeHomeIndexLazyRoute
+  '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/management': typeof HomeHomeManagementLazyRoute
 }
@@ -235,6 +257,7 @@ export interface FileRoutesById {
   '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
+  '/home/_home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/_home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/_home/management': typeof HomeHomeManagementLazyRoute
   '/home/_home/': typeof HomeHomeIndexLazyRoute
@@ -249,6 +272,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/update-password'
     | '/home'
+    | '/home/asset-listing'
     | '/home/inbox'
     | '/home/management'
     | '/home/'
@@ -260,6 +284,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/update-password'
     | '/home'
+    | '/home/asset-listing'
     | '/home/inbox'
     | '/home/management'
   id:
@@ -271,6 +296,7 @@ export interface FileRouteTypes {
     | '/update-password'
     | '/home'
     | '/home/_home'
+    | '/home/_home/asset-listing'
     | '/home/_home/inbox'
     | '/home/_home/management'
     | '/home/_home/'
@@ -338,10 +364,15 @@ export const routeTree = rootRoute
       "filePath": "home/_home.tsx",
       "parent": "/home",
       "children": [
+        "/home/_home/asset-listing",
         "/home/_home/inbox",
         "/home/_home/management",
         "/home/_home/"
       ]
+    },
+    "/home/_home/asset-listing": {
+      "filePath": "home/_home.asset-listing.lazy.tsx",
+      "parent": "/home/_home"
     },
     "/home/_home/inbox": {
       "filePath": "home/_home.inbox.lazy.tsx",
