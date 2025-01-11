@@ -73,7 +73,7 @@ export const Inbox = () => {
                     size={"sm"}
                     className=" text-orange-600 hover:bg-orange-50"
                   >
-                    <CircleOff className="h-4 w-4" />
+                    <CircleOff className=" scale-90" />
                     Reject
                   </Button>
                   <UpdateAuction
