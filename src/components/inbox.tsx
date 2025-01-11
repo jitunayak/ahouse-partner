@@ -17,10 +17,10 @@ export const Inbox = () => {
   }
   return (
     <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-screen">
-      <h1 className="text-2xl font-bold">Inbox</h1>
+      <h1 className="text-2xl font-bold">Pending Assets</h1>
 
       {data.length === 0 && <p>No Unapproved Auctions</p>}
-      <div className="w-full lg:w-[calc(100%-16rem)] space-y-4">
+      <div className="w-full lg:w-[calc(100%-16rem)] space-y-2 ">
         {data.map((auction) => {
           return (
             <div key={auction.id}>
@@ -32,30 +32,37 @@ export const Inbox = () => {
                       auction.images[0]
                     }
                     alt="image"
-                    className="rounded w-36 h-24 aspect-auto mr-4 object-fill"
+                    className="rounded w-36 h-34 aspect-auto mr-4 object-fill"
                   />
                   <div>
                     <AlertTitle>{auction.title}</AlertTitle>
-                    <AlertDescription>{auction.description}</AlertDescription>
-                    <div className="flex flex-col gap-2 mt-2">
-                      <div className="text-xs text-gray-500 ">
-                        Submitted by: N/A
-                      </div>
-
-                      <div className="text-xs text-gray-500 ">
-                        Auction Date:{" "}
+                    <AlertDescription className="text-neutral-500">
+                      {auction.description}
+                    </AlertDescription>
+                    <div className="text-xs text-gray-500 mt-4">
+                      Auction Date:
+                      <div className="text-xs text-gray-800 font-semibold">
                         {auction.start_time
                           ? format(auction.start_time, "PPP")
                           : "N/A"}
                       </div>
-
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
                       <div className="text-xs text-gray-500 ">
-                        EMD Amount:{" "}
-                        {auction.emd_amount ? auction.emd_amount : "N/A"}
+                        EMD Amount:
+                        <div className="text-xs text-gray-800 font-semibold ">
+                          {auction.emd_amount
+                            ? Number(auction.emd_amount).toLocaleString()
+                            : "N/A"}
+                        </div>
                       </div>
                       <div className="text-xs text-gray-500">
                         Asset Value:{" "}
-                        {auction.asset_value ? auction.asset_value : "N/A"}
+                        <div className="text-xs text-gray-800 font-semibold ">
+                          {auction.asset_value
+                            ? Number(auction.asset_value).toLocaleString()
+                            : "N/A"}
+                        </div>
                       </div>
                     </div>
                   </div>
