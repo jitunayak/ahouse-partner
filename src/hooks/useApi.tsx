@@ -82,14 +82,13 @@ export const useApi = () => {
               "It will be live once bidding information is submitted and approved",
           });
         },
-         onError: (err) => {
+        onError: (err) => {
           toast.error("Something went wrong", {
             description: JSON.stringify(err),
           });
         },
       });
     },
-
     update: (props: {
       id: number;
       emdAmount: number;
@@ -155,114 +154,73 @@ export const useApi = () => {
         return data;
       };
       return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "pending"],
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "created"],
         queryFn: getUnApprovedAuctions,
       });
     },
 
-    totalAuctions: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id);
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "total"],
-        queryFn: getUnApprovedAuctions,
-      });
-    },
+    totalCounts: () => {
+  const getCounts = async (filters: Record<string, any>) => {
+    const { count, error } = await supabase
+      .from("auctions")
+      .select("*", { count: "exact", head: true })
+      .eq("org_id", user?.org_id)
+      .match(filters);
+    if (error) {
+      throw new Error(error.message);
+    }
+    return count;
+  };
 
-    totalPendingAssets: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id)
-          .eq("status", "created");
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
-        queryFn: getUnApprovedAuctions,
-      });
-    },
-    totalVehicles: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id)
-          .eq("category", "vehicle");
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "vehicle"],
-        queryFn: getUnApprovedAuctions,
-      });
-    },
-    totalLand: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id)
-          .eq("category", "land");
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "land"],
-        queryFn: getUnApprovedAuctions,
-      });
-    },
+  const queries = [
+    { key: "total", filters: {} },
+    { key: "pending", filters: { status: "created" } },
+    { key: "vehicle", filters: { category: "vehicle" } },
+    { key: "land", filters: { category: "land" } },
+    { key: "realEstate", filters: { category: "real-estate" } },
+    { key: "gold", filters: { category: "gold" } },
+  ];
 
-    totalRealEstate: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id)
-          .eq("category", "real-estate");
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "real-estate"],
-        queryFn: getUnApprovedAuctions,
+  
+  const counts = queries
+    .map(({ key, filters }) =>
+      useQuery({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "count", key],
+        queryFn: () => getCounts(filters),
+      })
+    )
+    .map((query) => query.data);
+
+    const result = {
+      total: counts[0],
+      pending: counts[1],
+      vehicle: counts[2],
+      land: counts[3],
+      realEstate: counts[4],
+      gold: counts[5],
+    };
+
+  return result;
+},
+
+    readyForListing: async(id:string) => {
+      return useMutation({
+        mutationFn: async () => {
+          await supabase
+            .from("auctions")
+            .update({
+              status: "submitted",
+            })
+            .eq("org_id", user?.org_id)
+            .eq("id", id);
+        },
+        onSuccess: () => {
+          queryClient.invalidateQueries({
+            queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+          });
+        },
       });
-    },
-    totalGold: () => {
-      const getUnApprovedAuctions = async () => {
-        const { count, error } = await supabase
-          .from("auctions")
-          .select("*", { count: "exact", head: true })
-          .eq("org_id", user?.org_id)
-          .eq("category", "gold");
-        if (error) {
-          throw new Error(error.message);
-        }
-        return count;
-      };
-      return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "gold"],
-        queryFn: getUnApprovedAuctions,
-      });
-    },
+    }
   };
 
   return {

@@ -18,13 +18,14 @@ function CardValue({ children }: { children: React.ReactNode }) {
 }
 function HomeDashboard() {
   const { auctionsApi } = useApi();
-
-  const totalAssets = auctionsApi.totalAuctions();
-  const totalVehicles = auctionsApi.totalVehicles();
-  const totalLand = auctionsApi.totalLand();
-  const totalGold = auctionsApi.totalGold();
-  const totalRealEstate = auctionsApi.totalRealEstate();
-  const pendingAssets = auctionsApi.totalPendingAssets();
+  const {
+    total: totalAssets,
+    pending: totalPendingAssets,
+    vehicle: totalVehicles,
+    land: totalLand,
+    gold: totalGold,
+    realEstate: totalRealEstate,
+  } = auctionsApi.totalCounts();
 
   return (
     <div className="p-10">
@@ -33,9 +34,7 @@ function HomeDashboard() {
       <div className="flex flex-row flex-wrap gap-2">
         <Card>
           <div className="text-sm ">Total Assets</div>
-          <div className="text-3xl  text-green-600">
-            {totalAssets.data ? totalAssets.data : 0}
-          </div>
+          <div className="text-3xl  text-green-600">{totalAssets}</div>
         </Card>
         <Link to="/home/inbox">
           <Card>
@@ -43,9 +42,7 @@ function HomeDashboard() {
               <div className="text-sm ">Pending Assets</div>
               <ArrowUpRightIcon className="h-4 w-4 hover:text-primary hover:scale-110" />
             </div>
-            <div className="text-3xl text-red-400">
-              {pendingAssets.data ? pendingAssets.data : 0}
-            </div>
+            <div className="text-3xl text-red-400">{totalPendingAssets}</div>
           </Card>
         </Link>
       </div>
@@ -67,24 +64,22 @@ function HomeDashboard() {
       <div className="flex flex-row flex-wrap gap-2">
         <Card>
           <div className="text-sm ">Vehicles</div>
-          <CardValue>{totalVehicles.data ? totalVehicles.data : 0}</CardValue>
+          <CardValue>{totalVehicles ? totalVehicles : 0}</CardValue>
         </Card>
 
         <Card>
           <div className="text-sm ">Land</div>
-          <CardValue>{totalLand.data ? totalLand.data : 0}</CardValue>
+          <CardValue>{totalLand ? totalLand : 0}</CardValue>
         </Card>
 
         <Card>
           <div className="text-sm ">Gold</div>
-          <CardValue>{totalGold.data ? totalGold.data : 0}</CardValue>
+          <CardValue>{totalGold ? totalGold : 0}</CardValue>
         </Card>
 
         <Card>
           <div className="text-sm ">Real Estate</div>
-          <CardValue>
-            {totalRealEstate.data ? totalRealEstate.data : 0}
-          </CardValue>
+          <CardValue>{totalRealEstate ? totalRealEstate : 0}</CardValue>
         </Card>
       </div>
     </div>
