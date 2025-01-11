@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useImageUpload } from "@/hooks/use-image-upload";
 import { supabase } from "@/supabaseClient";
 import { ImageIcon } from "lucide-react";
+import { toast } from "sonner";
 
 type UploadAssetImageProps = {
   url: string;
@@ -16,15 +17,21 @@ export default function UploadAssetImage({
     fileInputRef,
     handleThumbnailClick: handleButtonClick,
     handleFileChange,
-    // handleRemove,
+    handleRemove,
     fileName,
   } = useImageUpload({
     onUpload: async () => {
+      if (fileInputRef.current!.files![0].size > 204800) {
+        toast.error("Image size must be less than 200kb");
+        handleRemove();
+        return;
+      }
       const { data, error } = await supabase.storage
         .from("auctions")
         .upload(url, fileInputRef.current!.files![0], {
           cacheControl: "3600",
           upsert: false,
+          contentType: "image/jpeg",
         });
       if (error) {
         console.error(error);
