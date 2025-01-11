@@ -162,14 +162,14 @@ export const useApi = () => {
 
     totalAuctions: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id);
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "total"],
@@ -179,15 +179,15 @@ export const useApi = () => {
 
     totalPendingAssets: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id)
           .eq("status", "created");
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
@@ -196,15 +196,15 @@ export const useApi = () => {
     },
     totalVehicles: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id)
           .eq("category", "vehicle");
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "vehicle"],
@@ -213,15 +213,15 @@ export const useApi = () => {
     },
     totalLand: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id)
           .eq("category", "land");
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "land"],
@@ -231,15 +231,15 @@ export const useApi = () => {
 
     totalRealEstate: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id)
           .eq("category", "real-estate");
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "real-estate"],
@@ -248,15 +248,15 @@ export const useApi = () => {
     },
     totalGold: () => {
       const getUnApprovedAuctions = async () => {
-        const { data, error } = await supabase
+        const { count, error } = await supabase
           .from("auctions")
-          .select("*", { count: "exact" })
+          .select("*", { count: "exact", head: true })
           .eq("org_id", user?.org_id)
           .eq("category", "gold");
         if (error) {
           throw new Error(error.message);
         }
-        return data.length;
+        return count;
       };
       return useQuery({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "gold"],
