@@ -20,6 +20,7 @@ function AssetListing() {
   }
 
   useEffect(() => {
+    if (isError) return;
     if (searchValue) {
       setFilteredItems(
         data.filter((d) =>
