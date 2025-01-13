@@ -14,24 +14,23 @@ function AssetListing() {
 
   const { data, isPending, isError, isSuccess } = auctionsApi.list();
 
-   useEffect(() => {
-     if (isError || !isSuccess) return;
-     if (searchValue) {
-       setFilteredItems(
-         data.filter((d) =>
-           JSON.stringify(d).toLowerCase().includes(searchValue.toLowerCase())
-         )
-       );
-     } else {
-       setFilteredItems(data);
-     }
-   }, [data, searchValue]);
-   if (isPending || !isSuccess) return <p>Loading...</p>;
-   if (isError) {
-     return <p>Error: {isError}</p>;
-   }
+  useEffect(() => {
+    if (isError || !isSuccess) return;
+    if (searchValue) {
+      setFilteredItems(
+        data.filter((d) =>
+          JSON.stringify(d).toLowerCase().includes(searchValue.toLowerCase())
+        )
+      );
+    } else {
+      setFilteredItems(data);
+    }
+  }, [data, searchValue]);
 
- 
+  if (isPending || !isSuccess) return <p>Loading...</p>;
+  if (isError) {
+    return <p>Error: {isError}</p>;
+  }
 
   return (
     <div>
