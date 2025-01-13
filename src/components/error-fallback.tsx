@@ -1,4 +1,4 @@
-import YourSvg from "../assets/error.svg";
+import ErrorSvg from "../assets/error.svg";
 
 type IProps = {
   type?: "permission" | "default";
@@ -8,7 +8,7 @@ export function ErrorFallback({ type = "default" }: IProps) {
     <div className="flex flex-1 w-full justify-center ">
       {type === "default" && (
         <div className="flex flex-col items-center justify-center gap-4">
-          <img src={YourSvg} alt="error" className="w-[200px]" />
+          <img src={ErrorSvg} alt="error" className="w-[200px]" />
           <div className="text-lg">Something went wrong!</div>
         </div>
       )}
