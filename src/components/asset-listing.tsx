@@ -2,6 +2,7 @@ import { useApi } from "@/hooks";
 import { format } from "date-fns";
 import { Search } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
+import { ErrorFallback } from "./error-fallback";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -27,7 +28,7 @@ function AssetListing() {
     }
   }, [data, searchValue]);
 
-  if (isPending || !isSuccess) return <p>Loading...</p>;
+  if (isPending || !isSuccess) return <ErrorFallback type="loading" />;
   if (isError) {
     return <p>Error: {isError}</p>;
   }
@@ -62,7 +63,7 @@ function AssetListing() {
             filteredItems.map((a) => (
               <div
                 key={a.id}
-                className="border border-gray-300 bg-background p-4 m-4 rounded  hover:shadow gap-4 grid"
+                className="border border-gray-200 bg-background p-4 m-4 rounded-lg hover:shadow gap-4 grid"
               >
                 <div className="flex flex-1 justify-between ">
                   <div className="space-y-2">
