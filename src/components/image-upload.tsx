@@ -21,8 +21,8 @@ export default function UploadAssetImage({
     fileName,
   } = useImageUpload({
     onUpload: async () => {
-      if (fileInputRef.current!.files![0].size > 204800) {
-        toast.error("Image size must be less than 200kb");
+      if (fileInputRef.current!.files![0].size > 604800) {
+        toast.error("Image size must be less than 600kb");
         handleRemove();
         return;
       }
