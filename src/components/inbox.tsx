@@ -34,8 +34,10 @@ export const Inbox = () => {
                   <div className="flex flex-col md:flex-row">
                     <img
                       src={
-                        `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/` +
-                        auction.images[0]
+                        auction.images[0].startsWith("http")
+                          ? auction.images[0]
+                          : `${import.meta.env.VITE_SUPABASE_URL}/storage/v1/object/public/` +
+                            auction.images[0]
                       }
                       alt="image"
                       className="rounded w-36 h-34 aspect-auto mr-4 object-fill"
