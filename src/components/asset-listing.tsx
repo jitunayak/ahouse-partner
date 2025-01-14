@@ -1,6 +1,6 @@
 import { useApi } from "@/hooks";
 import { format } from "date-fns";
-import { Search } from "lucide-react";
+import { CornerLeftDown, Search, SendIcon, TrashIcon } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
 import { ErrorFallback } from "./error-fallback";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
@@ -88,9 +88,15 @@ function AssetListing() {
                   </div>
 
                   <div className="flex-col flex gap-2 mt-10">
-                    <Button variant={"default"}>Push for auction</Button>
-                    <Button variant={"outline"}>Send back</Button>
-                    <Button variant={"outline"}>Delete</Button>
+                    <Button variant={"default"}>
+                      <SendIcon className="h-4 w-4" /> Publish
+                    </Button>
+                    <Button variant={"outline"}>
+                      <CornerLeftDown className="h-4 w-4" /> Send back
+                    </Button>
+                    <Button variant={"outline"}>
+                      <TrashIcon className="h-4 w-4" /> Delete
+                    </Button>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4 mt-2 border bg-neutral-50 p-4 rounded">

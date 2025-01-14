@@ -1,6 +1,7 @@
 import AssetListing from "@/components/asset-listing";
 import { ErrorFallback } from "@/components/error-fallback";
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 export const Route = createLazyFileRoute("/home/_home/asset-listing")({
   component: RouteComponent,
@@ -9,7 +10,9 @@ export const Route = createLazyFileRoute("/home/_home/asset-listing")({
 function RouteComponent() {
   return (
     <ErrorBoundary FallbackComponent={() => <ErrorFallback />}>
-      <AssetListing />;
+      <Suspense>
+        <AssetListing />;
+      </Suspense>
     </ErrorBoundary>
   );
 }
