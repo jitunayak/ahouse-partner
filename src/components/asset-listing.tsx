@@ -99,7 +99,7 @@ function AssetListing() {
                     </Button>
                   </div>
                 </div>
-                <div className="grid grid-cols-2 gap-4 mt-2 border bg-neutral-50 p-4 rounded">
+                <div className="grid grid-cols-4 gap-4 border bg-neutral-50 p-4 rounded w-full">
                   <div className="text-xs text-gray-500 ">
                     Case Number:
                     <div className="text-xs text-gray-800 font-semibold ">
