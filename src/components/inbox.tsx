@@ -17,12 +17,6 @@ export const Inbox = () => {
   const { data, isPending, error, isSuccess, isError } =
     auctionsApi.pendingItems();
 
-  if (isPending || !isSuccess) return <ErrorFallback type="loading" />;
-
-  if (isError) {
-    return <p>Error: {error}</p>;
-  }
-
   const handleApprove = useMutation({
     mutationFn: async (id: string) => {
       await auctionsApi.readyForListing(id);
@@ -33,6 +27,12 @@ export const Inbox = () => {
       });
     },
   });
+
+  if (isPending || !isSuccess) return <ErrorFallback type="loading" />;
+
+  if (isError) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-full">
