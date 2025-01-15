@@ -1,7 +1,12 @@
-import { useApi } from "@/hooks";
+import { useApi, useStore } from "@/hooks";
+import { queryClient } from "@/lib";
+import { QueryKeys } from "@/types/enum";
+import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CornerLeftDown, Search, SendIcon, TrashIcon } from "lucide-react";
 import { Suspense, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { useShallow } from "zustand/react/shallow";
 import { ErrorFallback } from "./error-fallback";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
@@ -9,7 +14,7 @@ import { Input } from "./ui/input";
 
 function AssetListing() {
   const { auctionsApi } = useApi();
-
+  const { user } = useStore(useShallow((s) => ({ user: s.user })));
   const [searchValue, setSetSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState<typeof data>([]);
 
@@ -27,6 +32,36 @@ function AssetListing() {
       setFilteredItems(data);
     }
   }, [data, searchValue]);
+
+  const deleteItemMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await auctionsApi.delete(id);
+    },
+    onSuccess: () => {
+      toast.success("Asset deleted successfully");
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+      });
+    },
+  });
+
+  const publishItemMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await auctionsApi.readyForPublish(id);
+    },
+    onSuccess: () => {
+      toast.success("Asset sent for approval");
+    },
+  });
+
+  const sentItBackMutation = useMutation({
+    mutationFn: async (id: string) => {
+      await auctionsApi.readyForUpdate(id);
+    },
+    onSuccess: () => {
+      toast.success("Asset sent back to review and update");
+    },
+  });
 
   if (isPending || !isSuccess) return <ErrorFallback type="loading" />;
   if (isError) {
@@ -88,14 +123,35 @@ function AssetListing() {
                   </div>
 
                   <div className="flex-col flex gap-2 mt-10">
-                    <Button variant={"default"}>
-                      <SendIcon className="h-4 w-4" /> Publish
+                    <Button
+                      variant={"default"}
+                      isLoading={publishItemMutation.isPending}
+                      onClick={() => publishItemMutation.mutateAsync(a.id)}
+                    >
+                      {!publishItemMutation.isPending && (
+                        <SendIcon className="h-4 w-4" />
+                      )}
+                      Publish
                     </Button>
-                    <Button variant={"outline"}>
-                      <CornerLeftDown className="h-4 w-4" /> Send back
+                    <Button
+                      variant={"outline"}
+                      isLoading={sentItBackMutation.isPending}
+                      onClick={() => sentItBackMutation.mutateAsync(a.id)}
+                    >
+                      {!sentItBackMutation.isPending && (
+                        <CornerLeftDown className="h-4 w-4" />
+                      )}
+                      Send back
                     </Button>
-                    <Button variant={"outline"}>
-                      <TrashIcon className="h-4 w-4" /> Delete
+                    <Button
+                      variant={"outline"}
+                      isLoading={deleteItemMutation.isPending}
+                      onClick={() => deleteItemMutation.mutateAsync(a.id)}
+                    >
+                      {!deleteItemMutation.isPending && (
+                        <TrashIcon className="h-4 w-4" />
+                      )}{" "}
+                      Delete
                     </Button>
                   </div>
                 </div>
@@ -106,7 +162,7 @@ function AssetListing() {
                       {a.case_number}
                     </div>
                   </div>
-                  <div className="text-xs text-gray-500 mt-2">
+                  <div className="text-xs text-gray-500">
                     Auction Date:
                     <div className="text-xs text-gray-800 font-semibold">
                       {a.start_time ? format(a.start_time, "PPP") : "N/A"}

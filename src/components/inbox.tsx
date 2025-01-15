@@ -1,6 +1,10 @@
-import { useApi } from "@/hooks";
+import { useApi, useStore } from "@/hooks";
+import { queryClient } from "@/lib";
+import { QueryKeys } from "@/types/enum";
+import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { CheckCheckIcon, CircleOff } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 import { ErrorFallback } from "./error-fallback";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
@@ -8,6 +12,8 @@ import UpdateAuction from "./update-auction";
 
 export const Inbox = () => {
   const { auctionsApi } = useApi();
+  const { user } = useStore(useShallow((s) => ({ user: s.user })));
+
   const { data, isPending, error, isSuccess, isError } =
     auctionsApi.pendingItems();
 
@@ -17,10 +23,16 @@ export const Inbox = () => {
     return <p>Error: {error}</p>;
   }
 
-  const handleApprove = async (id: string) => {
-    const { mutateAsync } = await auctionsApi.readyForListing(id);
-    mutateAsync();
-  };
+  const handleApprove = useMutation({
+    mutationFn: async (id: string) => {
+      await auctionsApi.readyForListing(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+      });
+    },
+  });
 
   return (
     <div className="space-y-4 gap-4 p-6 justify-center flex flex-col w-full">
@@ -96,7 +108,7 @@ export const Inbox = () => {
                   <Button
                     variant="outline"
                     size={"sm"}
-                    onClick={() => handleApprove(auction.id)}
+                    onClick={() => handleApprove.mutateAsync(auction.id)}
                     className="text-primary"
                     disabled={
                       !(
@@ -107,7 +119,7 @@ export const Inbox = () => {
                     }
                   >
                     <CheckCheckIcon className="h-4 w-4" />
-                    Ready to Publish
+                    Send for approval
                   </Button>
                 </div>
               </Alert>

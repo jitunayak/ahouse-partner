@@ -129,7 +129,9 @@ export const useApi = () => {
           .select(
             "id, title, description, status, images, case_number,  emd_amount, asset_value, start_time, end_time"
           )
-          .eq("org_id", user?.org_id);
+          .eq("org_id", user?.org_id)
+          .eq("status", "submitted");
+
         if (error) {
           throw new Error(error.message);
         }
@@ -202,23 +204,42 @@ export const useApi = () => {
 
       return result;
     },
+    readyForUpdate: async (id: string) => {
+      await supabase
+        .from("auctions")
+        .update({
+          status: "created",
+        })
+        .eq("org_id", user?.org_id)
+        .eq("id", id);
+    },
+
     readyForListing: async (id: string) => {
-      return useMutation({
-        mutationFn: async () => {
-          await supabase
-            .from("auctions")
-            .update({
-              status: "submitted",
-            })
-            .eq("org_id", user?.org_id)
-            .eq("id", id);
-        },
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: [QueryKeys.AUCTIONS, user?.org_id],
-          });
-        },
-      });
+      await supabase
+        .from("auctions")
+        .update({
+          status: "submitted",
+        })
+        .eq("org_id", user?.org_id)
+        .eq("id", id);
+    },
+
+    readyForPublish: async (id: string) => {
+      await supabase
+        .from("auctions")
+        .update({
+          status: "active",
+        })
+        .eq("org_id", user?.org_id)
+        .eq("id", id);
+    },
+
+    delete: async (id: string) => {
+      supabase
+        .from("auctions")
+        .delete()
+        .eq("org_id", user?.org_id)
+        .eq("id", id);
     },
   };
 

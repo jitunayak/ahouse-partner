@@ -10,8 +10,7 @@ export const Route = createLazyFileRoute("/home/_home/management")({
 function RouteComponent() {
   return (
     <ErrorBoundary FallbackComponent={() => <ErrorFallback />}>
-      {" "}
-      <UserManagement />{" "}
+      <UserManagement />
     </ErrorBoundary>
   );
 }
