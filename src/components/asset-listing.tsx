@@ -18,7 +18,7 @@ function AssetListing() {
   const [searchValue, setSetSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState<typeof data>([]);
 
-  const { data, isPending, isError, isSuccess } = auctionsApi.list();
+  const { data, isPending, isError, isSuccess, refetch } = auctionsApi.list();
 
   useEffect(() => {
     if (isError || !isSuccess) return;
@@ -59,7 +59,8 @@ function AssetListing() {
       await auctionsApi.readyForUpdate(id);
     },
     onSuccess: () => {
-      toast.success("Asset sent back to review and update");
+      toast("Asset sent back to review and update");
+      refetch();
     },
   });
 
@@ -88,7 +89,10 @@ function AssetListing() {
       <Suspense>
         {filteredItems &&
           (filteredItems.length == 0 ? (
-            <Alert className="m-4 rounded w-fit" variant={"destructive"}>
+            <Alert
+              className="flex flex-1 m-4 rounded w-full"
+              variant={"destructive"}
+            >
               <AlertTitle>No items to view</AlertTitle>
               <AlertDescription>
                 Add some new assets to see here or change your search value
@@ -150,7 +154,7 @@ function AssetListing() {
                     >
                       {!deleteItemMutation.isPending && (
                         <TrashIcon className="h-4 w-4" />
-                      )}{" "}
+                      )}
                       Delete
                     </Button>
                   </div>
