@@ -138,7 +138,7 @@ export const useApi = () => {
         return data;
       };
       return useQuery({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
         queryFn: getUnApprovedAuctions,
       });
     },

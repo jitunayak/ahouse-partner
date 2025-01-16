@@ -18,7 +18,7 @@ function AssetListing() {
   const [searchValue, setSetSearchValue] = useState("");
   const [filteredItems, setFilteredItems] = useState<typeof data>([]);
 
-  const { data, isPending, isError, isSuccess, refetch } = auctionsApi.list();
+  const { data, isPending, isError, isSuccess } = auctionsApi.list();
 
   useEffect(() => {
     if (isError || !isSuccess) return;
@@ -50,6 +50,9 @@ function AssetListing() {
       await auctionsApi.readyForPublish(id);
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+      });
       toast.success("Asset sent for approval");
     },
   });
@@ -60,7 +63,12 @@ function AssetListing() {
     },
     onSuccess: () => {
       toast("Asset sent back to review and update");
-      refetch();
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "created"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
+      });
     },
   });
 

@@ -23,7 +23,10 @@ export const Inbox = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QueryKeys.AUCTIONS, user?.org_id],
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "submitted"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [QueryKeys.AUCTIONS, user?.org_id, "created"],
       });
     },
   });
