@@ -11,7 +11,7 @@ function RouteComponent() {
   return (
     <ErrorBoundary FallbackComponent={() => <ErrorFallback />}>
       <Suspense>
-        <AssetListing />;
+        <AssetListing />
       </Suspense>
     </ErrorBoundary>
   );
