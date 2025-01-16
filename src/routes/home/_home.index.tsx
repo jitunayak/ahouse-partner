@@ -1,9 +1,9 @@
 import { ErrorFallback } from "@/components/error-fallback";
 import HomeDashboard from "@/components/home-dashboard";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { ErrorBoundary } from "react-error-boundary";
 
-export const Route = createLazyFileRoute("/home/_home/")({
+export const Route = createFileRoute("/home/_home/")({
   component: RouteComponent,
 });
 

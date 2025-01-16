@@ -109,7 +109,7 @@ export const useApi = () => {
         },
         onSuccess: () => {
           queryClient.invalidateQueries({
-            queryKey: [QueryKeys.AUCTIONS, user?.org_id, "pending"],
+            queryKey: [QueryKeys.AUCTIONS, user?.org_id, "created"],
           });
           toast.info("Asset updated successfully", {
             description: "Ready to be approved",

@@ -89,15 +89,14 @@ function AssetListing() {
       <Suspense>
         {filteredItems &&
           (filteredItems.length == 0 ? (
-            <Alert
-              className="flex flex-1 m-4 rounded w-full"
-              variant={"destructive"}
-            >
-              <AlertTitle>No items to view</AlertTitle>
-              <AlertDescription>
-                Add some new assets to see here or change your search value
-              </AlertDescription>
-            </Alert>
+            <div className="flex flex-col items-center">
+              <Alert className="rounded w-fit" variant={"default"}>
+                <AlertTitle>No items to view</AlertTitle>
+                <AlertDescription>
+                  Add some new assets to see here or change your search value
+                </AlertDescription>
+              </Alert>
+            </div>
           ) : (
             filteredItems.map((a) => (
               <div

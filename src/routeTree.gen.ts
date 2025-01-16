@@ -15,6 +15,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeImport } from './routes/home/_home'
+import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
 
 // Create Virtual Routes
 
@@ -23,7 +24,6 @@ const UpdatePasswordLazyImport = createFileRoute('/update-password')()
 const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const LoginLazyImport = createFileRoute('/login')()
 const R403LazyImport = createFileRoute('/403')()
-const HomeHomeIndexLazyImport = createFileRoute('/home/_home/')()
 const HomeHomeManagementLazyImport = createFileRoute('/home/_home/management')()
 const HomeHomeInboxLazyImport = createFileRoute('/home/_home/inbox')()
 const HomeHomeAssetListingLazyImport = createFileRoute(
@@ -77,13 +77,11 @@ const HomeHomeRoute = HomeHomeImport.update({
   getParentRoute: () => HomeRoute,
 } as any)
 
-const HomeHomeIndexLazyRoute = HomeHomeIndexLazyImport.update({
+const HomeHomeIndexRoute = HomeHomeIndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => HomeHomeRoute,
-} as any).lazy(() =>
-  import('./routes/home/_home.index.lazy').then((d) => d.Route),
-)
+} as any)
 
 const HomeHomeManagementLazyRoute = HomeHomeManagementLazyImport.update({
   id: '/management',
@@ -187,7 +185,7 @@ declare module '@tanstack/react-router' {
       id: '/home/_home/'
       path: '/'
       fullPath: '/home/'
-      preLoaderRoute: typeof HomeHomeIndexLazyImport
+      preLoaderRoute: typeof HomeHomeIndexImport
       parentRoute: typeof HomeHomeImport
     }
   }
@@ -199,14 +197,14 @@ interface HomeHomeRouteChildren {
   HomeHomeAssetListingLazyRoute: typeof HomeHomeAssetListingLazyRoute
   HomeHomeInboxLazyRoute: typeof HomeHomeInboxLazyRoute
   HomeHomeManagementLazyRoute: typeof HomeHomeManagementLazyRoute
-  HomeHomeIndexLazyRoute: typeof HomeHomeIndexLazyRoute
+  HomeHomeIndexRoute: typeof HomeHomeIndexRoute
 }
 
 const HomeHomeRouteChildren: HomeHomeRouteChildren = {
   HomeHomeAssetListingLazyRoute: HomeHomeAssetListingLazyRoute,
   HomeHomeInboxLazyRoute: HomeHomeInboxLazyRoute,
   HomeHomeManagementLazyRoute: HomeHomeManagementLazyRoute,
-  HomeHomeIndexLazyRoute: HomeHomeIndexLazyRoute,
+  HomeHomeIndexRoute: HomeHomeIndexRoute,
 }
 
 const HomeHomeRouteWithChildren = HomeHomeRoute._addFileChildren(
@@ -233,7 +231,7 @@ export interface FileRoutesByFullPath {
   '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/management': typeof HomeHomeManagementLazyRoute
-  '/home/': typeof HomeHomeIndexLazyRoute
+  '/home/': typeof HomeHomeIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -242,7 +240,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginLazyRoute
   '/reset-password': typeof ResetPasswordLazyRoute
   '/update-password': typeof UpdatePasswordLazyRoute
-  '/home': typeof HomeHomeIndexLazyRoute
+  '/home': typeof HomeHomeIndexRoute
   '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/management': typeof HomeHomeManagementLazyRoute
@@ -260,7 +258,7 @@ export interface FileRoutesById {
   '/home/_home/asset-listing': typeof HomeHomeAssetListingLazyRoute
   '/home/_home/inbox': typeof HomeHomeInboxLazyRoute
   '/home/_home/management': typeof HomeHomeManagementLazyRoute
-  '/home/_home/': typeof HomeHomeIndexLazyRoute
+  '/home/_home/': typeof HomeHomeIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -383,7 +381,7 @@ export const routeTree = rootRoute
       "parent": "/home/_home"
     },
     "/home/_home/": {
-      "filePath": "home/_home.index.lazy.tsx",
+      "filePath": "home/_home.index.tsx",
       "parent": "/home/_home"
     }
   }
