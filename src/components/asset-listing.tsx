@@ -1,5 +1,5 @@
 import { useApi, useStore } from "@/hooks";
-import { queryClient } from "@/lib";
+import { cn, queryClient } from "@/lib";
 import { QueryKeys } from "@/types/enum";
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -196,7 +196,12 @@ function AssetListing() {
                 <div
                   key={a.id}
                   onClick={() => enableSelectMode && handleSelect(a)}
-                  className="border border-gray-200 bg-background p-4 m-4 rounded-lg hover:shadow gap-4"
+                  className={cn(
+                    "border border-gray-200 bg-background pl-4 pr-2 py-2 m-4 rounded-lg hover:shadow gap-4",
+                    enableSelectMode &&
+                      selectedItems?.includes(a) &&
+                      "border-primary border-dashed shadow-primary"
+                  )}
                 >
                   <div className="grid grid-cols-3 justify-between ">
                     <div className="space-y-2 col-span-2">
