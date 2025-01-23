@@ -15,7 +15,6 @@ import { Suspense, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useShallow } from "zustand/react/shallow";
 import { ErrorFallback } from "./error-fallback";
-import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -177,13 +176,8 @@ function AssetListing() {
       <Suspense>
         {filteredItems &&
           (filteredItems.length == 0 ? (
-            <div className="flex flex-col items-center">
-              <Alert className="rounded w-fit" variant={"default"}>
-                <AlertTitle>No items to view</AlertTitle>
-                <AlertDescription>
-                  Add some new assets to see here or change your search value
-                </AlertDescription>
-              </Alert>
+            <div className="flex flex-col items-center mt-20">
+              <div className="text-2xl py-20">No Match! Oops</div>
             </div>
           ) : (
             <div className="mt-20 scrollbar-hide ">
