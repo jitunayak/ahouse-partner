@@ -95,7 +95,7 @@ function AssetListing() {
 
   return (
     <div className="">
-      <div className="fixed top-0 flex items-center w-fit flex-1 justify-between bg-neutral-100 z-50 px-10">
+      <div className="fixed top-0 flex items-center w-fit flex-1 justify-between z-50 px-10">
         <div className="flex items-center py-4 gap-6">
           <div className="relative w-full">
             <Input
@@ -180,7 +180,7 @@ function AssetListing() {
               <div className="text-2xl py-20">No Match! Oops</div>
             </div>
           ) : (
-            <div className="mt-20 scrollbar-hide ">
+            <div className="mt-16  scrollbar-hide ">
               {enableSelectMode && (
                 <div className="text-sm ml-6">
                   {selectedItems?.length} are selected{" "}
@@ -191,7 +191,7 @@ function AssetListing() {
                   key={a.id}
                   onClick={() => enableSelectMode && handleSelect(a)}
                   className={cn(
-                    "border border-gray-200 bg-background pl-4 pr-2 py-2 m-4 rounded hover:shadow gap-4",
+                    "border border-gray-200 dark:border-neutral-800 bg-background pl-4 pr-2 py-2 m-4 rounded hover:shadow gap-4",
                     enableSelectMode &&
                       selectedItems?.includes(a) &&
                       "border-primary border-dashed shadow-primary"
@@ -203,7 +203,7 @@ function AssetListing() {
                         {a.images.map((image: string) => {
                           return (
                             <img
-                              className="w-32 h-32 object-cover rounded hover:saturate-150"
+                              className="w-32 h-32 object-cover rounded hover:saturate-150 "
                               src={
                                 image.startsWith("http")
                                   ? image
