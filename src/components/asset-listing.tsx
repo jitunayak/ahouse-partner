@@ -199,22 +199,11 @@ function AssetListing() {
                 >
                   <div className="grid grid-cols-3 justify-between ">
                     <div className="space-y-2 col-span-2">
-                      <div className="inline-flex items-center gap-2">
-                        {enableSelectMode && (
-                          <input
-                            type="checkbox"
-                            checked={selectedItems?.includes(a)}
-                            onChange={() => handleSelect(a)}
-                          />
-                        )}
-                        <p className="text-md">{a.title}</p>
-                      </div>
-
                       <div className="flex flex-wrap gap-2">
                         {a.images.map((image: string) => {
                           return (
                             <img
-                              className="w-40 h-40 object-cover rounded"
+                              className="w-32 h-32 object-cover rounded"
                               src={
                                 image.startsWith("http")
                                   ? image
@@ -225,11 +214,22 @@ function AssetListing() {
                           );
                         })}
                       </div>
+                      <div className="inline-flex items-center gap-2">
+                        {enableSelectMode && (
+                          <input
+                            type="checkbox"
+                            checked={selectedItems?.includes(a)}
+                            onChange={() => handleSelect(a)}
+                          />
+                        )}
+                        <p className="text-sm">{a.title}</p>
+                      </div>
+
                       <p className="text-neutral-600 text-sm">
                         {a.description}
                       </p>
                     </div>
-                    <div className="grid col-span-1 h-auto grid-cols-2 gap-4 border bg-neutral-50 p-4 rounded">
+                    <div className="grid col-span-1 grid-cols-2 gap-4 pt-4">
                       <div className="text-xs text-gray-500 ">
                         Case Number:
                         <div className="text-xs text-gray-800 font-semibold ">
