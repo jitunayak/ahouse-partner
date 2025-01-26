@@ -95,7 +95,7 @@ function AssetListing() {
 
   return (
     <div className="">
-      <div className="fixed flex items-center w-fit flex-1 justify-between bg-neutral-100 z-50 px-10">
+      <div className="fixed top-0 flex items-center w-fit flex-1 justify-between bg-neutral-100 z-50 px-10">
         <div className="flex items-center py-4 gap-6">
           <div className="relative w-full">
             <Input
@@ -191,7 +191,7 @@ function AssetListing() {
                   key={a.id}
                   onClick={() => enableSelectMode && handleSelect(a)}
                   className={cn(
-                    "border border-gray-200 bg-background pl-4 pr-2 py-2 m-4 rounded-lg hover:shadow gap-4",
+                    "border border-gray-200 bg-background pl-4 pr-2 py-2 m-4 rounded hover:shadow gap-4",
                     enableSelectMode &&
                       selectedItems?.includes(a) &&
                       "border-primary border-dashed shadow-primary"
@@ -199,11 +199,11 @@ function AssetListing() {
                 >
                   <div className="grid grid-cols-3 justify-between ">
                     <div className="space-y-2 col-span-2">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-2 pt-1">
                         {a.images.map((image: string) => {
                           return (
                             <img
-                              className="w-32 h-32 object-cover rounded"
+                              className="w-32 h-32 object-cover rounded hover:saturate-150"
                               src={
                                 image.startsWith("http")
                                   ? image
