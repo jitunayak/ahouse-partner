@@ -13,22 +13,20 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as UpdatePasswordImport } from './routes/update-password'
+import { Route as ResetPasswordImport } from './routes/reset-password'
 import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as HomeHomeImport } from './routes/home/_home'
 import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
+import { Route as HomeHomeManagementImport } from './routes/home/_home.management'
+import { Route as HomeHomeInboxImport } from './routes/home/_home.inbox'
+import { Route as HomeHomeAssetListingImport } from './routes/home/_home.asset-listing'
 
 // Create Virtual Routes
 
 const HomeImport = createFileRoute('/home')()
-const UpdatePasswordLazyImport = createFileRoute('/update-password')()
-const ResetPasswordLazyImport = createFileRoute('/reset-password')()
 const R403LazyImport = createFileRoute('/403')()
-const HomeHomeManagementLazyImport = createFileRoute('/home/_home/management')()
-const HomeHomeInboxLazyImport = createFileRoute('/home/_home/inbox')()
-const HomeHomeAssetListingLazyImport = createFileRoute(
-  '/home/_home/asset-listing',
-)()
 
 // Create/Update Routes
 
@@ -38,27 +36,23 @@ const HomeRoute = HomeImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const UpdatePasswordLazyRoute = UpdatePasswordLazyImport.update({
-  id: '/update-password',
-  path: '/update-password',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/update-password.lazy').then((d) => d.Route),
-)
-
-const ResetPasswordLazyRoute = ResetPasswordLazyImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/reset-password.lazy').then((d) => d.Route),
-)
-
 const R403LazyRoute = R403LazyImport.update({
   id: '/403',
   path: '/403',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/403.lazy').then((d) => d.Route))
+
+const UpdatePasswordRoute = UpdatePasswordImport.update({
+  id: '/update-password',
+  path: '/update-password',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ResetPasswordRoute = ResetPasswordImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -83,29 +77,23 @@ const HomeHomeIndexRoute = HomeHomeIndexImport.update({
   getParentRoute: () => HomeHomeRoute,
 } as any)
 
-const HomeHomeManagementLazyRoute = HomeHomeManagementLazyImport.update({
+const HomeHomeManagementRoute = HomeHomeManagementImport.update({
   id: '/management',
   path: '/management',
   getParentRoute: () => HomeHomeRoute,
-} as any).lazy(() =>
-  import('./routes/home/_home.management.lazy').then((d) => d.Route),
-)
+} as any)
 
-const HomeHomeInboxLazyRoute = HomeHomeInboxLazyImport.update({
+const HomeHomeInboxRoute = HomeHomeInboxImport.update({
   id: '/inbox',
   path: '/inbox',
   getParentRoute: () => HomeHomeRoute,
-} as any).lazy(() =>
-  import('./routes/home/_home.inbox.lazy').then((d) => d.Route),
-)
+} as any)
 
-const HomeHomeAssetListingLazyRoute = HomeHomeAssetListingLazyImport.update({
+const HomeHomeAssetListingRoute = HomeHomeAssetListingImport.update({
   id: '/asset-listing',
   path: '/asset-listing',
   getParentRoute: () => HomeHomeRoute,
-} as any).lazy(() =>
-  import('./routes/home/_home.asset-listing.lazy').then((d) => d.Route),
-)
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -125,25 +113,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/403': {
-      id: '/403'
-      path: '/403'
-      fullPath: '/403'
-      preLoaderRoute: typeof R403LazyImport
-      parentRoute: typeof rootRoute
-    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordLazyImport
+      preLoaderRoute: typeof ResetPasswordImport
       parentRoute: typeof rootRoute
     }
     '/update-password': {
       id: '/update-password'
       path: '/update-password'
       fullPath: '/update-password'
-      preLoaderRoute: typeof UpdatePasswordLazyImport
+      preLoaderRoute: typeof UpdatePasswordImport
+      parentRoute: typeof rootRoute
+    }
+    '/403': {
+      id: '/403'
+      path: '/403'
+      fullPath: '/403'
+      preLoaderRoute: typeof R403LazyImport
       parentRoute: typeof rootRoute
     }
     '/home': {
@@ -164,21 +152,21 @@ declare module '@tanstack/react-router' {
       id: '/home/_home/asset-listing'
       path: '/asset-listing'
       fullPath: '/home/asset-listing'
-      preLoaderRoute: typeof HomeHomeAssetListingLazyImport
+      preLoaderRoute: typeof HomeHomeAssetListingImport
       parentRoute: typeof HomeHomeImport
     }
     '/home/_home/inbox': {
       id: '/home/_home/inbox'
       path: '/inbox'
       fullPath: '/home/inbox'
-      preLoaderRoute: typeof HomeHomeInboxLazyImport
+      preLoaderRoute: typeof HomeHomeInboxImport
       parentRoute: typeof HomeHomeImport
     }
     '/home/_home/management': {
       id: '/home/_home/management'
       path: '/management'
       fullPath: '/home/management'
-      preLoaderRoute: typeof HomeHomeManagementLazyImport
+      preLoaderRoute: typeof HomeHomeManagementImport
       parentRoute: typeof HomeHomeImport
     }
     '/home/_home/': {
@@ -194,16 +182,16 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface HomeHomeRouteChildren {
-  HomeHomeAssetListingLazyRoute: typeof HomeHomeAssetListingLazyRoute
-  HomeHomeInboxLazyRoute: typeof HomeHomeInboxLazyRoute
-  HomeHomeManagementLazyRoute: typeof HomeHomeManagementLazyRoute
+  HomeHomeAssetListingRoute: typeof HomeHomeAssetListingRoute
+  HomeHomeInboxRoute: typeof HomeHomeInboxRoute
+  HomeHomeManagementRoute: typeof HomeHomeManagementRoute
   HomeHomeIndexRoute: typeof HomeHomeIndexRoute
 }
 
 const HomeHomeRouteChildren: HomeHomeRouteChildren = {
-  HomeHomeAssetListingLazyRoute: HomeHomeAssetListingLazyRoute,
-  HomeHomeInboxLazyRoute: HomeHomeInboxLazyRoute,
-  HomeHomeManagementLazyRoute: HomeHomeManagementLazyRoute,
+  HomeHomeAssetListingRoute: HomeHomeAssetListingRoute,
+  HomeHomeInboxRoute: HomeHomeInboxRoute,
+  HomeHomeManagementRoute: HomeHomeManagementRoute,
   HomeHomeIndexRoute: HomeHomeIndexRoute,
 }
 
@@ -224,40 +212,40 @@ const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/403': typeof R403LazyRoute
-  '/reset-password': typeof ResetPasswordLazyRoute
-  '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeHomeRouteWithChildren
-  '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
-  '/home/inbox': typeof HomeHomeInboxLazyRoute
-  '/home/management': typeof HomeHomeManagementLazyRoute
+  '/home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/inbox': typeof HomeHomeInboxRoute
+  '/home/management': typeof HomeHomeManagementRoute
   '/home/': typeof HomeHomeIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/403': typeof R403LazyRoute
-  '/reset-password': typeof ResetPasswordLazyRoute
-  '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeHomeIndexRoute
-  '/home/asset-listing': typeof HomeHomeAssetListingLazyRoute
-  '/home/inbox': typeof HomeHomeInboxLazyRoute
-  '/home/management': typeof HomeHomeManagementLazyRoute
+  '/home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/inbox': typeof HomeHomeInboxRoute
+  '/home/management': typeof HomeHomeManagementRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
+  '/update-password': typeof UpdatePasswordRoute
   '/403': typeof R403LazyRoute
-  '/reset-password': typeof ResetPasswordLazyRoute
-  '/update-password': typeof UpdatePasswordLazyRoute
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
-  '/home/_home/asset-listing': typeof HomeHomeAssetListingLazyRoute
-  '/home/_home/inbox': typeof HomeHomeInboxLazyRoute
-  '/home/_home/management': typeof HomeHomeManagementLazyRoute
+  '/home/_home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/_home/inbox': typeof HomeHomeInboxRoute
+  '/home/_home/management': typeof HomeHomeManagementRoute
   '/home/_home/': typeof HomeHomeIndexRoute
 }
 
@@ -266,9 +254,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
-    | '/403'
     | '/reset-password'
     | '/update-password'
+    | '/403'
     | '/home'
     | '/home/asset-listing'
     | '/home/inbox'
@@ -278,9 +266,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
-    | '/403'
     | '/reset-password'
     | '/update-password'
+    | '/403'
     | '/home'
     | '/home/asset-listing'
     | '/home/inbox'
@@ -289,9 +277,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/login'
-    | '/403'
     | '/reset-password'
     | '/update-password'
+    | '/403'
     | '/home'
     | '/home/_home'
     | '/home/_home/asset-listing'
@@ -304,18 +292,18 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
+  UpdatePasswordRoute: typeof UpdatePasswordRoute
   R403LazyRoute: typeof R403LazyRoute
-  ResetPasswordLazyRoute: typeof ResetPasswordLazyRoute
-  UpdatePasswordLazyRoute: typeof UpdatePasswordLazyRoute
   HomeRoute: typeof HomeRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
+  UpdatePasswordRoute: UpdatePasswordRoute,
   R403LazyRoute: R403LazyRoute,
-  ResetPasswordLazyRoute: ResetPasswordLazyRoute,
-  UpdatePasswordLazyRoute: UpdatePasswordLazyRoute,
   HomeRoute: HomeRouteWithChildren,
 }
 
@@ -331,9 +319,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/login",
-        "/403",
         "/reset-password",
         "/update-password",
+        "/403",
         "/home"
       ]
     },
@@ -343,14 +331,14 @@ export const routeTree = rootRoute
     "/login": {
       "filePath": "login.tsx"
     },
-    "/403": {
-      "filePath": "403.lazy.tsx"
-    },
     "/reset-password": {
-      "filePath": "reset-password.lazy.tsx"
+      "filePath": "reset-password.tsx"
     },
     "/update-password": {
-      "filePath": "update-password.lazy.tsx"
+      "filePath": "update-password.tsx"
+    },
+    "/403": {
+      "filePath": "403.lazy.tsx"
     },
     "/home": {
       "filePath": "home",
@@ -369,15 +357,15 @@ export const routeTree = rootRoute
       ]
     },
     "/home/_home/asset-listing": {
-      "filePath": "home/_home.asset-listing.lazy.tsx",
+      "filePath": "home/_home.asset-listing.tsx",
       "parent": "/home/_home"
     },
     "/home/_home/inbox": {
-      "filePath": "home/_home.inbox.lazy.tsx",
+      "filePath": "home/_home.inbox.tsx",
       "parent": "/home/_home"
     },
     "/home/_home/management": {
-      "filePath": "home/_home.management.lazy.tsx",
+      "filePath": "home/_home.management.tsx",
       "parent": "/home/_home"
     },
     "/home/_home/": {

@@ -1,7 +1,7 @@
 import UpdatePassword from '@/components/update-password'
-import { createLazyFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createLazyFileRoute('/update-password')({
+export const Route = createFileRoute('/update-password')({
   component: RouteComponent,
 })
 
