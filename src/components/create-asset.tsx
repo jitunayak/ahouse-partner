@@ -1,4 +1,5 @@
 import { useApi, useStore } from "@/hooks";
+import { useAptabase } from "@aptabase/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
@@ -44,6 +45,8 @@ const formSchema = z.object({
 
 export default function CreateAsset() {
   const { auctionsApi } = useApi();
+  const { trackEvent } = useAptabase();
+
   const [images, setImages] = useState<string[]>([]);
   const [branchLocation, setBranchLocation] = useState<string>("");
 
@@ -96,7 +99,17 @@ export default function CreateAsset() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"outline"} className="text-primary">
+        <Button
+          variant={"outline"}
+          className="text-primary"
+          onClick={() =>
+            trackEvent("create_asset", {
+              org_id: user?.org_id!,
+              email_address: user?.email_address!,
+              user_id: user?.id!,
+            })
+          }
+        >
           Add Asset <PlusIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>

@@ -1,6 +1,7 @@
 import { useApi, useStore } from "@/hooks";
 import { cn, queryClient } from "@/lib";
 import { QueryKeys } from "@/types/enum";
+import { useAptabase } from "@aptabase/react";
 import { useMutation } from "@tanstack/react-query";
 import { format } from "date-fns";
 import {
@@ -26,6 +27,7 @@ function AssetListing() {
   const [selectedItems, setSelectedItems] = useState<typeof data>([]);
   const { data, isPending, isError, isSuccess } = auctionsApi.list();
   const [enableSelectMode, setEnableSelectMode] = useState(false);
+  const { trackEvent } = useAptabase();
 
   const handleSelect = (item: any) => {
     if (!item || !selectedItems) return;
@@ -79,6 +81,11 @@ function AssetListing() {
     },
     onSuccess: () => {
       toast("Asset sent back to review and update");
+      trackEvent("asset_sent_back_for_update", {
+        org_id: user?.org_id!,
+        user_id: user?.id!,
+        email_address: user?.email_address!,
+      });
       queryClient.invalidateQueries({
         queryKey: [QueryKeys.AUCTIONS, user?.org_id, "created"],
       });
