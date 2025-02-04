@@ -243,8 +243,22 @@ export const useApi = () => {
     },
   };
 
+  const branchApi = {
+    list: () =>
+      useQuery({
+        queryKey: [QueryKeys.BRANCHES, user?.org_id],
+        queryFn: async () =>
+          await supabase
+            .from("branches")
+            .select(
+              "id, name, organization_id, created_at, pincode, address, ifsc_code, contact_phone_number"
+            )
+            .eq("organization_id", user?.org_id),
+      }),
+  };
   return {
     userApi,
     auctionsApi,
+    branchApi,
   };
 };

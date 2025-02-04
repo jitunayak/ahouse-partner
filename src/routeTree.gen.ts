@@ -21,6 +21,7 @@ import { Route as HomeHomeImport } from './routes/home/_home'
 import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
 import { Route as HomeHomeManagementImport } from './routes/home/_home.management'
 import { Route as HomeHomeInboxImport } from './routes/home/_home.inbox'
+import { Route as HomeHomeBranchImport } from './routes/home/_home.branch'
 import { Route as HomeHomeAssetListingImport } from './routes/home/_home.asset-listing'
 
 // Create Virtual Routes
@@ -86,6 +87,12 @@ const HomeHomeManagementRoute = HomeHomeManagementImport.update({
 const HomeHomeInboxRoute = HomeHomeInboxImport.update({
   id: '/inbox',
   path: '/inbox',
+  getParentRoute: () => HomeHomeRoute,
+} as any)
+
+const HomeHomeBranchRoute = HomeHomeBranchImport.update({
+  id: '/branch',
+  path: '/branch',
   getParentRoute: () => HomeHomeRoute,
 } as any)
 
@@ -155,6 +162,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeHomeAssetListingImport
       parentRoute: typeof HomeHomeImport
     }
+    '/home/_home/branch': {
+      id: '/home/_home/branch'
+      path: '/branch'
+      fullPath: '/home/branch'
+      preLoaderRoute: typeof HomeHomeBranchImport
+      parentRoute: typeof HomeHomeImport
+    }
     '/home/_home/inbox': {
       id: '/home/_home/inbox'
       path: '/inbox'
@@ -183,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 interface HomeHomeRouteChildren {
   HomeHomeAssetListingRoute: typeof HomeHomeAssetListingRoute
+  HomeHomeBranchRoute: typeof HomeHomeBranchRoute
   HomeHomeInboxRoute: typeof HomeHomeInboxRoute
   HomeHomeManagementRoute: typeof HomeHomeManagementRoute
   HomeHomeIndexRoute: typeof HomeHomeIndexRoute
@@ -190,6 +205,7 @@ interface HomeHomeRouteChildren {
 
 const HomeHomeRouteChildren: HomeHomeRouteChildren = {
   HomeHomeAssetListingRoute: HomeHomeAssetListingRoute,
+  HomeHomeBranchRoute: HomeHomeBranchRoute,
   HomeHomeInboxRoute: HomeHomeInboxRoute,
   HomeHomeManagementRoute: HomeHomeManagementRoute,
   HomeHomeIndexRoute: HomeHomeIndexRoute,
@@ -217,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/403': typeof R403LazyRoute
   '/home': typeof HomeHomeRouteWithChildren
   '/home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/branch': typeof HomeHomeBranchRoute
   '/home/inbox': typeof HomeHomeInboxRoute
   '/home/management': typeof HomeHomeManagementRoute
   '/home/': typeof HomeHomeIndexRoute
@@ -230,6 +247,7 @@ export interface FileRoutesByTo {
   '/403': typeof R403LazyRoute
   '/home': typeof HomeHomeIndexRoute
   '/home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/branch': typeof HomeHomeBranchRoute
   '/home/inbox': typeof HomeHomeInboxRoute
   '/home/management': typeof HomeHomeManagementRoute
 }
@@ -244,6 +262,7 @@ export interface FileRoutesById {
   '/home': typeof HomeRouteWithChildren
   '/home/_home': typeof HomeHomeRouteWithChildren
   '/home/_home/asset-listing': typeof HomeHomeAssetListingRoute
+  '/home/_home/branch': typeof HomeHomeBranchRoute
   '/home/_home/inbox': typeof HomeHomeInboxRoute
   '/home/_home/management': typeof HomeHomeManagementRoute
   '/home/_home/': typeof HomeHomeIndexRoute
@@ -259,6 +278,7 @@ export interface FileRouteTypes {
     | '/403'
     | '/home'
     | '/home/asset-listing'
+    | '/home/branch'
     | '/home/inbox'
     | '/home/management'
     | '/home/'
@@ -271,6 +291,7 @@ export interface FileRouteTypes {
     | '/403'
     | '/home'
     | '/home/asset-listing'
+    | '/home/branch'
     | '/home/inbox'
     | '/home/management'
   id:
@@ -283,6 +304,7 @@ export interface FileRouteTypes {
     | '/home'
     | '/home/_home'
     | '/home/_home/asset-listing'
+    | '/home/_home/branch'
     | '/home/_home/inbox'
     | '/home/_home/management'
     | '/home/_home/'
@@ -351,6 +373,7 @@ export const routeTree = rootRoute
       "parent": "/home",
       "children": [
         "/home/_home/asset-listing",
+        "/home/_home/branch",
         "/home/_home/inbox",
         "/home/_home/management",
         "/home/_home/"
@@ -358,6 +381,10 @@ export const routeTree = rootRoute
     },
     "/home/_home/asset-listing": {
       "filePath": "home/_home.asset-listing.tsx",
+      "parent": "/home/_home"
+    },
+    "/home/_home/branch": {
+      "filePath": "home/_home.branch.tsx",
       "parent": "/home/_home"
     },
     "/home/_home/inbox": {

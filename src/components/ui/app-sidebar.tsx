@@ -32,6 +32,11 @@ const applicationItems = [
     url: "/home/management",
     icon: User2Icon,
   },
+  {
+    title: "Branches",
+    url: "/home/branch",
+    icon: Mail,
+  },
 ];
 const assetItems = [
   {

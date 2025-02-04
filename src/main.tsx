@@ -24,7 +24,10 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <AptabaseProvider appKey="A-US-3749439299">
+      <AptabaseProvider
+        appKey="A-US-3749439299"
+        options={{ appVersion: "0.1.0" }}
+      >
         <ThemeProvider
           defaultTheme="light"
           storageKey="partner-ahouse-ui-theme"
