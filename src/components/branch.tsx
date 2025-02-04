@@ -137,7 +137,7 @@ const columns: ColumnDef<Item>[] = [
         aria-label="Select row"
       />
     ),
-    size: 28,
+    size: 16,
     enableSorting: false,
     enableHiding: false,
   },
@@ -145,7 +145,7 @@ const columns: ColumnDef<Item>[] = [
     header: "Name",
     accessorKey: "name",
     cell: ({ row }) => (
-      <div className="font-medium">{row.getValue("name")}</div>
+      <div className="font-medium text-sm">{row.getValue("name")}</div>
     ),
     size: 120,
     filterFn: multiColumnFilterFn,
@@ -165,7 +165,9 @@ const columns: ColumnDef<Item>[] = [
     header: "Address",
     accessorKey: "address",
     cell: ({ row }) => (
-      <div className="text-muted-foreground">{row.getValue("address")}</div>
+      <div className="text-muted-foreground text-sm">
+        {row.getValue("address")}
+      </div>
     ),
     size: 220,
   },
