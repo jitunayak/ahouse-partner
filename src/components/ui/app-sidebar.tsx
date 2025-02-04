@@ -91,7 +91,7 @@ function SidebarMenuItems({
               />
               <span
                 className={cn(
-                  "ml-2 font-medium text-xs",
+                  "ml-2 font-medium text-sm",
                   location.pathname === item.url
                     ? "text-primary"
                     : "text-muted-foreground"

@@ -198,11 +198,6 @@ export const Branch = () => {
     isSuccess,
   } = branchApi.list();
 
-  if (isPending) return <div>Loading...</div>;
-  if (isError) return <div>Error: {JSON.stringify(error)}</div>;
-
-  if (!branches.data || !isSuccess) return <div>No data</div>;
-
   const id = useId();
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -227,6 +222,11 @@ export const Branch = () => {
     // setData(updatedData);
     table.resetRowSelection();
   };
+
+  if (isPending) return <div>Loading...</div>;
+  if (isError) return <div>Error: {JSON.stringify(error)}</div>;
+
+  if (!branches.data || !isSuccess) return <div>No data</div>;
 
   const table = useReactTable({
     data: branches.data,
@@ -386,9 +386,9 @@ export const Branch = () => {
                         className="flex grow justify-between gap-2 font-normal"
                       >
                         {value}{" "}
-                        <span className="ms-2 text-xs text-muted-foreground">
+                        {/* <span className="ms-2 text-xs text-muted-foreground">
                           {statusCounts.get(value)}
-                        </span>
+                        </span> */}
                       </Label>
                     </div>
                   ))}
