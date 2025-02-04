@@ -16,7 +16,14 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/supabaseClient";
 import { User } from "@supabase/supabase-js";
 import { Link, useLocation, useRouter } from "@tanstack/react-router";
-import { HomeIcon, Mail, PauseIcon, SendIcon, User2Icon } from "lucide-react";
+import {
+  GitBranchIcon,
+  HomeIcon,
+  Mail,
+  PauseIcon,
+  SendIcon,
+  User2Icon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { Button } from "./button";
@@ -35,7 +42,7 @@ const applicationItems = [
   {
     title: "Branches",
     url: "/home/branch",
-    icon: Mail,
+    icon: GitBranchIcon,
   },
 ];
 const assetItems = [

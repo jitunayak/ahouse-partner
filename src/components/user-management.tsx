@@ -240,7 +240,7 @@ export function UserManagement() {
 
   return (
     <div className="h-screen">
-      <div className="m-4 rounded-md p-6 shadow-sm border bg-background">
+      <div className="m-4 rounded-md p-6 bg-white">
         <CreateUserModal />
         <div className="flex items-center py-4 gap-6">
           <div className="relative">

@@ -305,9 +305,9 @@ export const Branch = () => {
   };
 
   return (
-    <div className="space-y-4 p-6 bg-background">
+    <div className="space-y-4 p-4 bg-background rounded-md m-2">
       {/* Filters */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-1">
         <div className="flex items-center gap-3">
           {/* Filter by name or email */}
           <div className="relative">
@@ -364,7 +364,7 @@ export const Branch = () => {
                 )}
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="min-w-36 p-3" align="start">
+            <PopoverContent className="min-w-36 p-1" align="start">
               <div className="space-y-3">
                 <div className="text-xs font-medium text-muted-foreground">
                   Filters
